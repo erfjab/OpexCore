@@ -2,7 +2,7 @@ from typing import Optional, Dict
 from aiohttp import ClientSession, ClientTimeout, ClientResponse
 
 
-class RequestHandler:
+class RequestBase:
     @classmethod
     async def fetch(
         cls,

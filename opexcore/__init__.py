@@ -1,3 +1,3 @@
-from .core import OpexCoreException
+from .core import RequestBase
 
-__all__ = ["OpexCoreException"]
+__all__ = ["RequestBase"]

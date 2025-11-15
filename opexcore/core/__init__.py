@@ -1,4 +1,3 @@
-from .request import RequestHandler
-from .exceptions import OpexCoreException
+from .request import RequestBase
 
-__all__ = ["RequestHandler", "OpexCoreException"]
+__all__ = ["RequestBase"]
