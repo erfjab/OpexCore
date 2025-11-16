@@ -62,6 +62,7 @@ class RequestBase:
     async def post(
         cls,
         url: str,
+        params: Optional[Dict] = None,
         data: Optional[Dict] = None,
         headers: Optional[Dict] = None,
         timeout: int = 10,
@@ -78,6 +79,7 @@ class RequestBase:
             method="POST",
             url=url,
             data=data,
+            params=params,
             headers=headers,
             timeout=timeout,
         )
@@ -86,6 +88,8 @@ class RequestBase:
     async def delete(
         cls,
         url: str,
+        params: Optional[Dict] = None,
+        data: Optional[Dict] = None,
         headers: Optional[Dict] = None,
         timeout: int = 10,
     ) -> ClientResponse:
@@ -99,6 +103,8 @@ class RequestBase:
         return await cls.fetch(
             method="DELETE",
             url=url,
+            data=data,
+            params=params,
             headers=headers,
             timeout=timeout,
         )
@@ -107,6 +113,7 @@ class RequestBase:
     async def put(
         cls,
         url: str,
+        params: Optional[Dict] = None,
         data: Optional[Dict] = None,
         headers: Optional[Dict] = None,
         timeout: int = 10,
@@ -123,6 +130,7 @@ class RequestBase:
             method="PUT",
             url=url,
             data=data,
+            params=params,
             headers=headers,
             timeout=timeout,
         )
