@@ -94,7 +94,7 @@ class MarzneshinManager(RequestBase):
         page: int = 1,
         size: int = 50,
         timeout: int = 10,
-    ) -> Dict[str, Any]:
+    ) -> list[MarzneshinAdminResponse]:
         """
         Fetch a list of admins with optional filters.
 
@@ -104,7 +104,7 @@ class MarzneshinManager(RequestBase):
         :param page: Page number
         :param size: Page size
         :param timeout: Request timeout in seconds
-        :return: Paginated admin responses
+        :return: List of admin responses
         """
         params = {"page": page, "size": size}
         if username:
@@ -116,7 +116,8 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        data = await response.json()
+        return [MarzneshinAdminResponse(**admin) for admin in data.get("items", [])]
 
     @classmethod
     async def create_admin(
@@ -218,7 +219,7 @@ class MarzneshinManager(RequestBase):
         page: int = 1,
         size: int = 50,
         timeout: int = 10,
-    ) -> Dict[str, Any]:
+    ) -> list[MarzneshinServiceResponse]:
         """
         Get admin services.
 
@@ -228,7 +229,7 @@ class MarzneshinManager(RequestBase):
         :param page: Page number
         :param size: Page size
         :param timeout: Request timeout in seconds
-        :return: Paginated service responses
+        :return: List of service responses
         """
         params = {"page": page, "size": size}
         response = await cls.get(
@@ -237,7 +238,10 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        data = await response.json()
+        return [
+            MarzneshinServiceResponse(**service) for service in data.get("items", [])
+        ]
 
     @classmethod
     async def get_admin_users(
@@ -248,7 +252,7 @@ class MarzneshinManager(RequestBase):
         page: int = 1,
         size: int = 50,
         timeout: int = 10,
-    ) -> Dict[str, Any]:
+    ) -> list[MarzneshinUserResponse]:
         """
         Get admin users.
 
@@ -258,7 +262,7 @@ class MarzneshinManager(RequestBase):
         :param page: Page number
         :param size: Page size
         :param timeout: Request timeout in seconds
-        :return: Paginated user responses
+        :return: List of user responses
         """
         params = {"page": page, "size": size}
         response = await cls.get(
@@ -267,7 +271,8 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        data = await response.json()
+        return [MarzneshinUserResponse(**user) for user in data.get("items", [])]
 
     @classmethod
     async def disable_admin_users(
@@ -321,7 +326,7 @@ class MarzneshinManager(RequestBase):
         page: int = 1,
         size: int = 50,
         timeout: int = 10,
-    ) -> Dict[str, Any]:
+    ) -> list[MarzneshinNodeResponse]:
         """
         Retrieve a list of all nodes.
 
@@ -332,7 +337,7 @@ class MarzneshinManager(RequestBase):
         :param page: Page number
         :param size: Page size
         :param timeout: Request timeout in seconds
-        :return: Paginated node responses
+        :return: List of node responses
         """
         params = {"page": page, "size": size}
         if status:
@@ -346,7 +351,8 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        data = await response.json()
+        return [MarzneshinNodeResponse(**node) for node in data.get("items", [])]
 
     @classmethod
     async def add_node(
@@ -597,7 +603,7 @@ class MarzneshinManager(RequestBase):
         page: int = 1,
         size: int = 50,
         timeout: int = 10,
-    ) -> Dict[str, Any]:
+    ) -> list[MarzneshinServiceResponse]:
         """
         Get all services with optional filters.
 
@@ -607,7 +613,7 @@ class MarzneshinManager(RequestBase):
         :param page: Page number
         :param size: Page size
         :param timeout: Request timeout in seconds
-        :return: Paginated service responses
+        :return: List of service responses
         """
         params = {"page": page, "size": size}
         if name:
@@ -619,7 +625,10 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        data = await response.json()
+        return [
+            MarzneshinServiceResponse(**service) for service in data.get("items", [])
+        ]
 
     @classmethod
     async def add_service(
@@ -725,7 +734,7 @@ class MarzneshinManager(RequestBase):
         page: int = 1,
         size: int = 50,
         timeout: int = 10,
-    ) -> Dict[str, Any]:
+    ) -> list[MarzneshinUserResponse]:
         """
         Get service users.
 
@@ -735,7 +744,7 @@ class MarzneshinManager(RequestBase):
         :param page: Page number
         :param size: Page size
         :param timeout: Request timeout in seconds
-        :return: Paginated user responses
+        :return: List of user responses
         """
         params = {"page": page, "size": size}
         response = await cls.get(
@@ -744,7 +753,8 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        data = await response.json()
+        return [MarzneshinUserResponse(**user) for user in data.get("items", [])]
 
     @classmethod
     async def get_service_inbounds(
@@ -755,7 +765,7 @@ class MarzneshinManager(RequestBase):
         page: int = 1,
         size: int = 50,
         timeout: int = 10,
-    ) -> Dict[str, Any]:
+    ) -> list[MarzneshinInbound]:
         """
         Get service inbounds.
 
@@ -765,7 +775,7 @@ class MarzneshinManager(RequestBase):
         :param page: Page number
         :param size: Page size
         :param timeout: Request timeout in seconds
-        :return: Paginated inbound responses
+        :return: List of inbound responses
         """
         params = {"page": page, "size": size}
         response = await cls.get(
@@ -774,7 +784,8 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        data = await response.json()
+        return [MarzneshinInbound(**inbound) for inbound in data.get("items", [])]
 
     @classmethod
     async def get_inbounds(
@@ -785,7 +796,7 @@ class MarzneshinManager(RequestBase):
         page: int = 1,
         size: int = 50,
         timeout: int = 10,
-    ) -> Dict[str, Any]:
+    ) -> list[MarzneshinInbound]:
         """
         Get all inbounds.
 
@@ -795,7 +806,7 @@ class MarzneshinManager(RequestBase):
         :param page: Page number
         :param size: Page size
         :param timeout: Request timeout in seconds
-        :return: Paginated inbound responses
+        :return: List of inbound responses
         """
         params = {"page": page, "size": size}
         if tag:
@@ -807,7 +818,8 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        data = await response.json()
+        return [MarzneshinInbound(**inbound) for inbound in data.get("items", [])]
 
     @classmethod
     async def get_inbound(
@@ -833,7 +845,7 @@ class MarzneshinManager(RequestBase):
     @classmethod
     async def get_hosts(
         cls, host: str, token: str, page: int = 1, size: int = 50, timeout: int = 10
-    ) -> Dict[str, Any]:
+    ) -> list[MarzneshinInboundHostResponse]:
         """
         Get all hosts.
 
@@ -842,7 +854,7 @@ class MarzneshinManager(RequestBase):
         :param page: Page number
         :param size: Page size
         :param timeout: Request timeout in seconds
-        :return: Paginated host responses
+        :return: List of host responses
         """
         params = {"page": page, "size": size}
         response = await cls.get(
@@ -851,7 +863,8 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        data = await response.json()
+        return [MarzneshinInboundHostResponse(**host) for host in data.get("items", [])]
 
     @classmethod
     async def create_unbound_host(
@@ -957,7 +970,7 @@ class MarzneshinManager(RequestBase):
         page: int = 1,
         size: int = 50,
         timeout: int = 10,
-    ) -> Dict[str, Any]:
+    ) -> list[MarzneshinInboundHostResponse]:
         """
         Get hosts of a specific inbound.
 
@@ -967,7 +980,7 @@ class MarzneshinManager(RequestBase):
         :param page: Page number
         :param size: Page size
         :param timeout: Request timeout in seconds
-        :return: Paginated host responses
+        :return: List of host responses
         """
         params = {"page": page, "size": size}
         response = await cls.get(
@@ -976,7 +989,8 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        data = await response.json()
+        return [MarzneshinInboundHostResponse(**host) for host in data.get("items", [])]
 
     @classmethod
     async def create_inbound_host(
@@ -1023,7 +1037,7 @@ class MarzneshinManager(RequestBase):
         page: int = 1,
         size: int = 50,
         timeout: int = 10,
-    ) -> Dict[str, Any]:
+    ) -> list[MarzneshinUserResponse]:
         """
         Get all users with optional filters.
 
@@ -1041,7 +1055,7 @@ class MarzneshinManager(RequestBase):
         :param page: Page number
         :param size: Page size
         :param timeout: Request timeout in seconds
-        :return: Paginated user responses
+        :return: List of user responses
         """
         params = {"page": page, "size": size, "descending": descending}
         if username:
@@ -1067,7 +1081,8 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        data = await response.json()
+        return [MarzneshinUserResponse(**user) for user in data.get("items", [])]
 
     @classmethod
     async def add_user(
@@ -1210,7 +1225,7 @@ class MarzneshinManager(RequestBase):
         page: int = 1,
         size: int = 50,
         timeout: int = 10,
-    ) -> Dict[str, Any]:
+    ) -> list[MarzneshinServiceResponse]:
         """
         Get user services.
 
@@ -1220,7 +1235,7 @@ class MarzneshinManager(RequestBase):
         :param page: Page number
         :param size: Page size
         :param timeout: Request timeout in seconds
-        :return: Paginated service responses
+        :return: List of service responses
         """
         params = {"page": page, "size": size}
         response = await cls.get(
@@ -1229,7 +1244,10 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        data = await response.json()
+        return [
+            MarzneshinServiceResponse(**service) for service in data.get("items", [])
+        ]
 
     @classmethod
     async def reset_user_data_usage(

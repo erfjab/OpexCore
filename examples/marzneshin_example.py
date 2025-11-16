@@ -28,38 +28,31 @@ async def main():
     print("\n👥 Getting list of admins...")
     admins_response = await MarzneshinManager.get_admins(HOST, token, page=1, size=10)
     print("✅ Found admins:")
-    for item in admins_response.get("items", []):
-        print(f"   - {item.get('username', 'N/A')}")
+    for item in admins_response:
+        print(f"   - {item.username}")
 
     # Step 4: Get users list
     print("\n📋 Getting users list...")
     users_response = await MarzneshinManager.get_users(HOST, token, page=1, size=5)
-    items = users_response.get("items", [])
-    print(f"✅ Showing {len(items)} users:")
-    for item in items:
-        status = "🟢 Active" if item.get("activated") else "🔴 Inactive"
-        print(f"   - {item.get('username', 'N/A')}: {status}")
-
+    print(f"✅ Showing {len(users_response)} users:")
+    for item in users_response:
+        status = "🟢 Active" if item.activated else "🔴 Inactive"
+        print(f"   - {item.username}: {status}")
     # Step 5: Get services list
     print("\n🔧 Getting services list...")
     services_response = await MarzneshinManager.get_services(
         HOST, token, page=1, size=5
     )
-    service_items = services_response.get("items", [])
-    print(f"✅ Found {len(service_items)} services:")
-    for service in service_items:
-        print(f"   - {service.get('name', 'N/A')}")
-
+    print(f"✅ Found {len(services_response)} services:")
+    for service in services_response:
+        print(f"   - {service.name}")
     # Step 6: Get nodes list
     print("\n🌐 Getting nodes list...")
     nodes_response = await MarzneshinManager.get_nodes(HOST, token, page=1, size=10)
-    node_items = nodes_response.get("items", [])
-    print(f"✅ Found {len(node_items)} nodes:")
-    for node in node_items:
-        status = (
-            "🟢 Connected" if node.get("status") == "connected" else "🔴 Disconnected"
-        )
-        print(f"   - {node.get('name', 'N/A')}: {status}")
+    print(f"✅ Found {len(nodes_response)} nodes:")
+    for node in nodes_response:
+        status = "🟢 Connected" if node.status == "connected" else "🔴 Disconnected"
+        print(f"   - {node.name}: {status}")
 
     # Step 7: Get system statistics
     print("\n📊 Getting system statistics...")
@@ -73,11 +66,9 @@ async def main():
     inbounds_response = await MarzneshinManager.get_inbounds(
         HOST, token, page=1, size=5
     )
-    inbound_items = inbounds_response.get("items", [])
-    print(f"✅ Found {len(inbound_items)} inbounds:")
-    for inbound in inbound_items:
-        print(f"   - {inbound.get('tag', 'N/A')}")
-
+    print(f"✅ Found {len(inbounds_response)} inbounds:")
+    for inbound in inbounds_response:
+        print(f"   - {inbound.tag}")
     print("\n✨ All operations completed successfully!")
 
 
