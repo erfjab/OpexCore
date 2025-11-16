@@ -1,7 +1,7 @@
 [project]
 name = "opexcore"
 version = "0.1.0"
-description = "Add your description here"
+description = "A unified Python SDK for managing multiple VPN panel APIs including Marzban, Marzneshin, Guard, and PasarGuard"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
