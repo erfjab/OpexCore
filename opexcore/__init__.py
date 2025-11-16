@@ -3,6 +3,7 @@ from .marzneshin import MarzneshinManager
 from .marzban import MarzbanManager
 from .guard import GuardManager
 from .pasarguard import PasarGuardManager
+from .remnawave import RemnawaveManager
 
 __all__ = [
     "RequestBase",
@@ -10,4 +11,5 @@ __all__ = [
     "MarzbanManager",
     "GuardManager",
     "PasarGuardManager",
+    "RemnawaveManager",
 ]

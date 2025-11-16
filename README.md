@@ -11,6 +11,7 @@ A unified Python SDK for managing multiple VPN panels API.
 - [x] Marzban
 - [x] Marzneshin
 - [x] Pasarguard
+- [x] Remnawave
 - [ ] Rebbeca
 
 ### Installation
