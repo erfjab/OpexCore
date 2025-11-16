@@ -31,6 +31,7 @@ class RequestBase:
                 data=data,
                 headers=headers,
             ) as response:
+                response.raise_for_status()
                 return response
 
     @classmethod
