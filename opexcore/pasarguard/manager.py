@@ -97,7 +97,7 @@ class PasarGuardManager(RequestBase):
         """
         response = await cls.post(
             url=f"{host.rstrip('/')}/api/admin",
-            data=admin_data.dict(),
+            data=admin_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -124,7 +124,7 @@ class PasarGuardManager(RequestBase):
         """
         response = await cls.put(
             url=f"{host.rstrip('/')}/api/admin/{username}",
-            data=admin_data.dict(),
+            data=admin_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -272,7 +272,7 @@ class PasarGuardManager(RequestBase):
         """
         response = await cls.post(
             url=f"{host.rstrip('/')}/api/group",
-            data=group_data.dict(),
+            data=group_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -356,7 +356,7 @@ class PasarGuardManager(RequestBase):
         """
         response = await cls.put(
             url=f"{host.rstrip('/')}/api/group/{group_id}",
-            data=group_data.dict(),
+            data=group_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -397,7 +397,7 @@ class PasarGuardManager(RequestBase):
         """
         response = await cls.post(
             url=f"{host.rstrip('/')}/api/core",
-            data=core_data.dict(),
+            data=core_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -448,7 +448,7 @@ class PasarGuardManager(RequestBase):
         response = await cls.put(
             url=f"{host.rstrip('/')}/api/core/{core_id}",
             params=params,
-            data=core_data.dict(),
+            data=core_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -531,7 +531,7 @@ class PasarGuardManager(RequestBase):
         """
         response = await cls.post(
             url=f"{host.rstrip('/')}/api/host/",
-            data=host_data.dict(),
+            data=host_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -578,7 +578,7 @@ class PasarGuardManager(RequestBase):
         """
         response = await cls.put(
             url=f"{host.rstrip('/')}/api/host/{host_id}",
-            data=host_data.dict(),
+            data=host_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -717,7 +717,7 @@ class PasarGuardManager(RequestBase):
         """
         response = await cls.post(
             url=f"{host.rstrip('/')}/api/node",
-            data=node_data.dict(),
+            data=node_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -849,7 +849,7 @@ class PasarGuardManager(RequestBase):
         """
         response = await cls.post(
             url=f"{host.rstrip('/')}/api/user_template",
-            data=template_data.dict(),
+            data=template_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )

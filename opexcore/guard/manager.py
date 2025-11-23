@@ -157,7 +157,7 @@ class GuardManager(RequestBase):
         """
         response = await cls.post(
             url=f"{host.rstrip('/')}/api/nodes",
-            data=node_data.dict(),
+            data=node_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -223,7 +223,7 @@ class GuardManager(RequestBase):
         """
         response = await cls.put(
             url=f"{host.rstrip('/')}/api/nodes/{node_id}",
-            data=node_data.dict(),
+            data=node_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -323,7 +323,7 @@ class GuardManager(RequestBase):
         """
         response = await cls.post(
             url=f"{host.rstrip('/')}/api/services",
-            data=service_data.dict(),
+            data=service_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -370,7 +370,7 @@ class GuardManager(RequestBase):
         """
         response = await cls.put(
             url=f"{host.rstrip('/')}/api/services/{service_id}",
-            data=service_data.dict(),
+            data=service_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -430,7 +430,7 @@ class GuardManager(RequestBase):
         """
         response = await cls.post(
             url=f"{host.rstrip('/')}/api/admins",
-            data=admin_data.dict(),
+            data=admin_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -495,7 +495,7 @@ class GuardManager(RequestBase):
         """
         response = await cls.put(
             url=f"{host.rstrip('/')}/api/admins/current",
-            data=admin_data.dict(),
+            data=admin_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -561,7 +561,7 @@ class GuardManager(RequestBase):
         """
         response = await cls.put(
             url=f"{host.rstrip('/')}/api/admins/{username}",
-            data=admin_data.dict(),
+            data=admin_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -823,7 +823,7 @@ class GuardManager(RequestBase):
         """
         response = await cls.post(
             url=f"{host.rstrip('/')}/api/subscriptions",
-            data=[sub.dict() for sub in subscriptions_data],
+            data=[sub.model_dump_json(exclude_none=True) for sub in subscriptions_data],
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -934,7 +934,7 @@ class GuardManager(RequestBase):
         """
         response = await cls.put(
             url=f"{host.rstrip('/')}/api/subscriptions/{username}",
-            data=subscription_data.dict(),
+            data=subscription_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
