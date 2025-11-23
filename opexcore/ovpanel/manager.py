@@ -1,4 +1,5 @@
 from typing import Optional, Dict, Any
+from aiohttp import ClientSession, ClientTimeout
 from opexcore.core import RequestBase
 from .types import (
     OVPanelToken,
@@ -42,8 +43,7 @@ class OVPanelManager(RequestBase):
             headers={"Content-Type": "application/x-www-form-urlencoded"},
             timeout=timeout,
         )
-        data = await response.json()
-        return OVPanelToken(**data)
+        return OVPanelToken(**response)
 
     @classmethod
     async def get_all_users(
@@ -62,8 +62,7 @@ class OVPanelManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return OVPanelResponseModel(**data)
+        return OVPanelResponseModel(**response)
 
     @classmethod
     async def create_user(
@@ -84,8 +83,7 @@ class OVPanelManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return OVPanelResponseModel(**data)
+        return OVPanelResponseModel(**response)
 
     @classmethod
     async def update_user(
@@ -106,7 +104,7 @@ class OVPanelManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def change_user_status(
@@ -127,8 +125,7 @@ class OVPanelManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return OVPanelResponseModel(**data)
+        return OVPanelResponseModel(**response)
 
     @classmethod
     async def delete_user(
@@ -148,7 +145,7 @@ class OVPanelManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def get_settings(
@@ -167,8 +164,7 @@ class OVPanelManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return OVPanelSettings(**data)
+        return OVPanelSettings(**response)
 
     @classmethod
     async def get_server_info(
@@ -187,8 +183,7 @@ class OVPanelManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return OVPanelServerInfo(**data)
+        return OVPanelServerInfo(**response)
 
     @classmethod
     async def add_node(
@@ -209,8 +204,7 @@ class OVPanelManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return OVPanelResponseModel(**data)
+        return OVPanelResponseModel(**response)
 
     @classmethod
     async def update_node(
@@ -237,8 +231,7 @@ class OVPanelManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return OVPanelResponseModel(**data)
+        return OVPanelResponseModel(**response)
 
     @classmethod
     async def get_node_status(
@@ -258,8 +251,7 @@ class OVPanelManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return OVPanelNodeStatus(**data)
+        return OVPanelNodeStatus(**response)
 
     @classmethod
     async def list_nodes(
@@ -278,8 +270,7 @@ class OVPanelManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return OVPanelResponseModel(**data)
+        return OVPanelResponseModel(**response)
 
     @classmethod
     async def download_ovpn_client(
@@ -295,12 +286,13 @@ class OVPanelManager(RequestBase):
         :param timeout: Request timeout in seconds
         :return: OVPN configuration file content
         """
-        response = await cls.get(
-            url=f"{host.rstrip('/')}/api/node/download/ovpn/{address}/{name}",
-            headers=cls._generate_headers(token),
-            timeout=timeout,
-        )
-        return await response.read()
+        async with ClientSession(timeout=ClientTimeout(total=timeout)) as session:
+            async with session.get(
+                url=f"{host.rstrip('/')}/api/node/download/ovpn/{address}/{name}",
+                headers=cls._generate_headers(token),
+            ) as response:
+                response.raise_for_status()
+                return await response.read()
 
     @classmethod
     async def delete_node(
@@ -320,8 +312,7 @@ class OVPanelManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return OVPanelResponseModel(**data)
+        return OVPanelResponseModel(**response)
 
     @classmethod
     async def get_all_admins(
@@ -340,5 +331,4 @@ class OVPanelManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return OVPanelResponseModel(**data)
+        return OVPanelResponseModel(**response)

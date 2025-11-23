@@ -49,7 +49,7 @@ class GuardManager(RequestBase):
         response = await cls.get(
             url=f"{host.rstrip('/')}/guards/{secret}", timeout=timeout
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def get_subscription_info_by_secret(
@@ -66,8 +66,7 @@ class GuardManager(RequestBase):
         response = await cls.get(
             url=f"{host.rstrip('/')}/guards/{secret}/info", timeout=timeout
         )
-        data = await response.json()
-        return GuardSubscriptionResponse(**data)
+        return GuardSubscriptionResponse(**response)
 
     @classmethod
     async def get_subscription_usages_by_secret(
@@ -84,8 +83,7 @@ class GuardManager(RequestBase):
         response = await cls.get(
             url=f"{host.rstrip('/')}/guards/{secret}/usages", timeout=timeout
         )
-        data = await response.json()
-        return GuardSubscriptionUsageLogsResponse(**data)
+        return GuardSubscriptionUsageLogsResponse(**response)
 
     @classmethod
     async def get_stats(
@@ -104,8 +102,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return GuardStatsResponse(**data)
+        return GuardStatsResponse(**response)
 
     @classmethod
     async def get_admin_stats(
@@ -124,8 +121,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return AdminStatsResponseNew(**data)
+        return AdminStatsResponseNew(**response)
 
     @classmethod
     async def get_nodes(
@@ -144,8 +140,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return [GuardNodeResponse(**item) for item in data]
+        return [GuardNodeResponse(**item) for item in response]
 
     @classmethod
     async def create_node(
@@ -166,8 +161,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return GuardNodeResponse(**data)
+        return GuardNodeResponse(**response)
 
     @classmethod
     async def get_node_stats(
@@ -186,8 +180,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return GuardNodeStatsResponse(**data)
+        return GuardNodeStatsResponse(**response)
 
     @classmethod
     async def get_node(
@@ -207,8 +200,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return GuardNodeResponse(**data)
+        return GuardNodeResponse(**response)
 
     @classmethod
     async def update_node(
@@ -235,8 +227,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return GuardNodeResponse(**data)
+        return GuardNodeResponse(**response)
 
     @classmethod
     async def delete_node(
@@ -256,7 +247,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def enable_node(
@@ -276,8 +267,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return GuardNodeResponse(**data)
+        return GuardNodeResponse(**response)
 
     @classmethod
     async def disable_node(
@@ -297,8 +287,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return GuardNodeResponse(**data)
+        return GuardNodeResponse(**response)
 
     @classmethod
     async def get_services(
@@ -317,8 +306,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return [GuardServiceResponse(**item) for item in data]
+        return [GuardServiceResponse(**item) for item in response]
 
     @classmethod
     async def create_service(
@@ -339,8 +327,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return GuardServiceResponse(**data)
+        return GuardServiceResponse(**response)
 
     @classmethod
     async def get_service(
@@ -360,8 +347,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return GuardServiceResponse(**data)
+        return GuardServiceResponse(**response)
 
     @classmethod
     async def update_service(
@@ -388,8 +374,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return GuardServiceResponse(**data)
+        return GuardServiceResponse(**response)
 
     @classmethod
     async def delete_service(
@@ -409,7 +394,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def get_admins(
@@ -428,8 +413,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return [GuardAdminResponse(**item) for item in data]
+        return [GuardAdminResponse(**item) for item in response]
 
     @classmethod
     async def create_admin(
@@ -450,8 +434,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return GuardAdminResponse(**data)
+        return GuardAdminResponse(**response)
 
     @classmethod
     async def create_token(
@@ -472,8 +455,7 @@ class GuardManager(RequestBase):
             headers={"Content-Type": "application/x-www-form-urlencoded"},
             timeout=timeout,
         )
-        data = await response.json()
-        return GuardAdminToken(**data)
+        return GuardAdminToken(**response)
 
     @classmethod
     async def get_current_admin(
@@ -492,8 +474,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return GuardAdminResponse(**data)
+        return GuardAdminResponse(**response)
 
     @classmethod
     async def update_current_admin(
@@ -518,8 +499,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return GuardAdminResponse(**data)
+        return GuardAdminResponse(**response)
 
     @classmethod
     async def get_current_admin_usages(
@@ -538,8 +518,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return GuardAdminUsageLogsResponse(**data)
+        return GuardAdminUsageLogsResponse(**response)
 
     @classmethod
     async def get_admin(
@@ -559,8 +538,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return GuardAdminResponse(**data)
+        return GuardAdminResponse(**response)
 
     @classmethod
     async def update_admin(
@@ -587,8 +565,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return GuardAdminResponse(**data)
+        return GuardAdminResponse(**response)
 
     @classmethod
     async def delete_admin(
@@ -608,7 +585,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def get_admin_usages(
@@ -628,8 +605,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return GuardAdminUsageLogsResponse(**data)
+        return GuardAdminUsageLogsResponse(**response)
 
     @classmethod
     async def enable_admin(
@@ -649,8 +625,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return GuardAdminResponse(**data)
+        return GuardAdminResponse(**response)
 
     @classmethod
     async def disable_admin(
@@ -670,8 +645,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return GuardAdminResponse(**data)
+        return GuardAdminResponse(**response)
 
     @classmethod
     async def revoke_admin_api_key(
@@ -691,8 +665,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return GuardAdminResponse(**data)
+        return GuardAdminResponse(**response)
 
     @classmethod
     async def get_admin_subscriptions(
@@ -712,8 +685,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return [GuardSubscriptionResponse(**item) for item in data]
+        return [GuardSubscriptionResponse(**item) for item in response]
 
     @classmethod
     async def delete_admin_subscriptions(
@@ -733,7 +705,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def activate_admin_subscriptions(
@@ -753,7 +725,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def deactivate_admin_subscriptions(
@@ -773,7 +745,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def get_subscriptions(
@@ -830,8 +802,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return [GuardSubscriptionResponse(**item) for item in data]
+        return [GuardSubscriptionResponse(**item) for item in response]
 
     @classmethod
     async def create_subscriptions(
@@ -856,8 +827,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        response_data = await response.json()
-        return [GuardSubscriptionResponse(**item) for item in response_data]
+        return [GuardSubscriptionResponse(**item) for item in response]
 
     @classmethod
     async def get_subscription_count(
@@ -902,7 +872,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def get_subscription_stats(
@@ -921,8 +891,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return GuardSubscriptionStatsResponse(**data)
+        return GuardSubscriptionStatsResponse(**response)
 
     @classmethod
     async def get_subscription(
@@ -942,8 +911,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return GuardSubscriptionResponse(**data)
+        return GuardSubscriptionResponse(**response)
 
     @classmethod
     async def update_subscription(
@@ -970,8 +938,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return GuardSubscriptionResponse(**data)
+        return GuardSubscriptionResponse(**response)
 
     @classmethod
     async def delete_subscription(
@@ -991,7 +958,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def get_subscription_usages(
@@ -1011,8 +978,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return GuardSubscriptionUsageLogsResponse(**data)
+        return GuardSubscriptionUsageLogsResponse(**response)
 
     @classmethod
     async def enable_subscription(
@@ -1032,8 +998,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return GuardSubscriptionResponse(**data)
+        return GuardSubscriptionResponse(**response)
 
     @classmethod
     async def disable_subscription(
@@ -1053,8 +1018,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return GuardSubscriptionResponse(**data)
+        return GuardSubscriptionResponse(**response)
 
     @classmethod
     async def revoke_subscription(
@@ -1074,8 +1038,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return GuardSubscriptionResponse(**data)
+        return GuardSubscriptionResponse(**response)
 
     @classmethod
     async def reset_subscription(
@@ -1095,8 +1058,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return GuardSubscriptionResponse(**data)
+        return GuardSubscriptionResponse(**response)
 
     @classmethod
     async def bulk_add_service(
@@ -1116,7 +1078,7 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def bulk_remove_service(
@@ -1136,4 +1098,4 @@ class GuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response

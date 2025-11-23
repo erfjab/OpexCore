@@ -61,8 +61,7 @@ class PasarGuardManager(RequestBase):
             headers={"Content-Type": "application/x-www-form-urlencoded"},
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardToken(**data)
+        return PasarGuardToken(**response)
 
     @classmethod
     async def get_current_admin(
@@ -81,8 +80,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardAdminDetails(**data)
+        return PasarGuardAdminDetails(**response)
 
     @classmethod
     async def create_admin(
@@ -103,8 +101,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardAdminDetails(**data)
+        return PasarGuardAdminDetails(**response)
 
     @classmethod
     async def modify_admin(
@@ -131,8 +128,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardAdminDetails(**data)
+        return PasarGuardAdminDetails(**response)
 
     @classmethod
     async def remove_admin(
@@ -152,7 +148,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def get_admins(
@@ -193,8 +189,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return [PasarGuardAdminDetails(**item) for item in data]
+        return [PasarGuardAdminDetails(**item) for item in response]
 
     @classmethod
     async def reset_admin_usage(
@@ -214,8 +209,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardAdminDetails(**data)
+        return PasarGuardAdminDetails(**response)
 
     @classmethod
     async def get_system_stats(
@@ -244,8 +238,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardSystemStats(**data)
+        return PasarGuardSystemStats(**response)
 
     @classmethod
     async def get_inbounds(cls, host: str, token: str, timeout: int = 10) -> List[str]:
@@ -262,7 +255,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def create_group(
@@ -283,8 +276,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardGroupResponse(**data)
+        return PasarGuardGroupResponse(**response)
 
     @classmethod
     async def get_groups(
@@ -317,11 +309,10 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
         return (
-            [PasarGuardGroupResponse(**item["groups"]) for item in [data]][0]
-            if isinstance(data, dict)
-            else [PasarGuardGroupResponse(**item) for item in data]
+            [PasarGuardGroupResponse(**item["groups"]) for item in [response]][0]
+            if isinstance(response, dict)
+            else [PasarGuardGroupResponse(**item) for item in response]
         )
 
     @classmethod
@@ -342,8 +333,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardGroupResponse(**data)
+        return PasarGuardGroupResponse(**response)
 
     @classmethod
     async def modify_group(
@@ -370,8 +360,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardGroupResponse(**data)
+        return PasarGuardGroupResponse(**response)
 
     @classmethod
     async def remove_group(
@@ -391,7 +380,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def create_core(
@@ -412,8 +401,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardCoreResponse(**data)
+        return PasarGuardCoreResponse(**response)
 
     @classmethod
     async def get_core(
@@ -433,8 +421,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardCoreResponse(**data)
+        return PasarGuardCoreResponse(**response)
 
     @classmethod
     async def modify_core(
@@ -465,8 +452,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardCoreResponse(**data)
+        return PasarGuardCoreResponse(**response)
 
     @classmethod
     async def delete_core(
@@ -494,7 +480,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def get_cores(
@@ -527,8 +513,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        cores = data.get("cores", []) if isinstance(data, dict) else data
+        cores = response.get("cores", []) if isinstance(response, dict) else response
         return [PasarGuardCoreResponse(**item) for item in cores]
 
     @classmethod
@@ -550,8 +535,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardHostResponse(**data)
+        return PasarGuardHostResponse(**response)
 
     @classmethod
     async def get_host(
@@ -571,8 +555,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardHostResponse(**data)
+        return PasarGuardHostResponse(**response)
 
     @classmethod
     async def modify_host(
@@ -599,8 +582,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardHostResponse(**data)
+        return PasarGuardHostResponse(**response)
 
     @classmethod
     async def remove_host(
@@ -620,7 +602,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def get_hosts(
@@ -648,8 +630,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return [PasarGuardHostResponse(**item) for item in data]
+        return [PasarGuardHostResponse(**item) for item in response]
 
     @classmethod
     async def get_node_settings(
@@ -668,8 +649,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardNodeSettings(**data)
+        return PasarGuardNodeSettings(**response)
 
     @classmethod
     async def get_nodes(
@@ -720,8 +700,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return [PasarGuardNodeResponse(**item) for item in data]
+        return [PasarGuardNodeResponse(**item) for item in response]
 
     @classmethod
     async def create_node(
@@ -742,8 +721,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardNodeResponse(**data)
+        return PasarGuardNodeResponse(**response)
 
     @classmethod
     async def get_node(
@@ -763,8 +741,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardNodeResponse(**data)
+        return PasarGuardNodeResponse(**response)
 
     @classmethod
     async def modify_node(
@@ -791,8 +768,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardNodeResponse(**data)
+        return PasarGuardNodeResponse(**response)
 
     @classmethod
     async def remove_node(
@@ -812,7 +788,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def reset_node_usage(
@@ -832,8 +808,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardNodeResponse(**data)
+        return PasarGuardNodeResponse(**response)
 
     @classmethod
     async def reconnect_node(
@@ -853,7 +828,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def create_user_template(
@@ -878,8 +853,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardUserTemplateResponse(**data)
+        return PasarGuardUserTemplateResponse(**response)
 
     @classmethod
     async def get_user_template(
@@ -899,8 +873,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardUserTemplateResponse(**data)
+        return PasarGuardUserTemplateResponse(**response)
 
     @classmethod
     async def modify_user_template(
@@ -927,8 +900,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardUserTemplateResponse(**data)
+        return PasarGuardUserTemplateResponse(**response)
 
     @classmethod
     async def remove_user_template(
@@ -948,7 +920,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def get_user_templates(
@@ -981,8 +953,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return [PasarGuardUserTemplateResponse(**item) for item in data]
+        return [PasarGuardUserTemplateResponse(**item) for item in response]
 
     @classmethod
     async def create_user(
@@ -1003,8 +974,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardUserResponse(**data)
+        return PasarGuardUserResponse(**response)
 
     @classmethod
     async def get_user(
@@ -1024,8 +994,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardUserResponse(**data)
+        return PasarGuardUserResponse(**response)
 
     @classmethod
     async def modify_user(
@@ -1052,8 +1021,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardUserResponse(**data)
+        return PasarGuardUserResponse(**response)
 
     @classmethod
     async def remove_user(
@@ -1073,7 +1041,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def reset_user_data_usage(
@@ -1093,8 +1061,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardUserResponse(**data)
+        return PasarGuardUserResponse(**response)
 
     @classmethod
     async def revoke_user_subscription(
@@ -1114,8 +1081,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardUserResponse(**data)
+        return PasarGuardUserResponse(**response)
 
     @classmethod
     async def get_users(
@@ -1178,8 +1144,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardUsersResponse(**data)
+        return PasarGuardUsersResponse(**response)
 
     @classmethod
     async def set_user_owner(
@@ -1207,8 +1172,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardUserResponse(**data)
+        return PasarGuardUserResponse(**response)
 
     @classmethod
     async def get_expired_users(
@@ -1245,7 +1209,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def delete_expired_users(
@@ -1282,7 +1246,7 @@ class PasarGuardManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def user_subscription(
@@ -1306,7 +1270,7 @@ class PasarGuardManager(RequestBase):
             headers=headers,
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def user_subscription_info(
@@ -1324,8 +1288,7 @@ class PasarGuardManager(RequestBase):
             url=f"{host.rstrip('/')}/sub/{token}/info",
             timeout=timeout,
         )
-        data = await response.json()
-        return PasarGuardSubscriptionUserResponse(**data)
+        return PasarGuardSubscriptionUserResponse(**response)
 
     @classmethod
     async def user_subscription_with_client_type(
@@ -1348,4 +1311,4 @@ class PasarGuardManager(RequestBase):
             url=f"{host.rstrip('/')}/sub/{token}/{client_type}",
             timeout=timeout,
         )
-        return await response.json()
+        return response

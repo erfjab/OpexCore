@@ -1,4 +1,5 @@
 from typing import Optional, List, Dict, Any
+from aiohttp import ClientSession, ClientTimeout
 from opexcore.core import RequestBase
 from .types import (
     RemnawaveToken,
@@ -46,8 +47,7 @@ class RemnawaveManager(RequestBase):
             headers={"Content-Type": "application/json"},
             timeout=timeout,
         )
-        data = await response.json()
-        return RemnawaveToken(**data.get("response", data))
+        return RemnawaveToken(**response.get("response", response))
 
     @classmethod
     async def admin_register(
@@ -68,8 +68,7 @@ class RemnawaveManager(RequestBase):
             headers={"Content-Type": "application/json"},
             timeout=timeout,
         )
-        data = await response.json()
-        return RemnawaveToken(**data.get("response", data))
+        return RemnawaveToken(**response.get("response", response))
 
     @classmethod
     async def create_user(
@@ -90,8 +89,7 @@ class RemnawaveManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return RemnawaveUser(**data.get("response", data))
+        return RemnawaveUser(**response.get("response", response))
 
     @classmethod
     async def get_users(
@@ -124,8 +122,7 @@ class RemnawaveManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        users_data = data.get("response", {}).get("users", [])
+        users_data = response.get("response", {}).get("users", [])
         return [RemnawaveUser(**user) for user in users_data]
 
     @classmethod
@@ -146,8 +143,7 @@ class RemnawaveManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return RemnawaveUser(**data.get("response", data))
+        return RemnawaveUser(**response.get("response", response))
 
     @classmethod
     async def update_user(
@@ -174,8 +170,7 @@ class RemnawaveManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return RemnawaveUser(**data.get("response", data))
+        return RemnawaveUser(**response.get("response", response))
 
     @classmethod
     async def delete_user(
@@ -195,7 +190,7 @@ class RemnawaveManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def disable_user(
@@ -215,8 +210,7 @@ class RemnawaveManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return RemnawaveUser(**data.get("response", data))
+        return RemnawaveUser(**response.get("response", response))
 
     @classmethod
     async def enable_user(
@@ -236,8 +230,7 @@ class RemnawaveManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return RemnawaveUser(**data.get("response", data))
+        return RemnawaveUser(**response.get("response", response))
 
     @classmethod
     async def reset_user_traffic(
@@ -257,8 +250,7 @@ class RemnawaveManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return RemnawaveUser(**data.get("response", data))
+        return RemnawaveUser(**response.get("response", response))
 
     @classmethod
     async def revoke_user_subscription(
@@ -279,8 +271,7 @@ class RemnawaveManager(RequestBase):
             timeout=timeout,
             data={},
         )
-        data = await response.json()
-        return RemnawaveUser(**data.get("response", data))
+        return RemnawaveUser(**response.get("response", response))
 
     @classmethod
     async def get_nodes(
@@ -299,8 +290,7 @@ class RemnawaveManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        nodes_data = data.get("response", [])
+        nodes_data = response.get("response", [])
         return [RemnawaveNode(**node) for node in nodes_data]
 
     @classmethod
@@ -322,8 +312,7 @@ class RemnawaveManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return RemnawaveNode(**data.get("response", data))
+        return RemnawaveNode(**response.get("response", response))
 
     @classmethod
     async def get_node(
@@ -343,8 +332,7 @@ class RemnawaveManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return RemnawaveNode(**data.get("response", data))
+        return RemnawaveNode(**response.get("response", response))
 
     @classmethod
     async def update_node(
@@ -371,8 +359,7 @@ class RemnawaveManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return RemnawaveNode(**data.get("response", data))
+        return RemnawaveNode(**response.get("response", response))
 
     @classmethod
     async def delete_node(
@@ -392,7 +379,7 @@ class RemnawaveManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def enable_node(
@@ -412,8 +399,7 @@ class RemnawaveManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return RemnawaveNode(**data.get("response", data))
+        return RemnawaveNode(**response.get("response", response))
 
     @classmethod
     async def disable_node(
@@ -433,8 +419,7 @@ class RemnawaveManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return RemnawaveNode(**data.get("response", data))
+        return RemnawaveNode(**response.get("response", response))
 
     @classmethod
     async def restart_node(
@@ -454,7 +439,7 @@ class RemnawaveManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def reset_node_traffic(
@@ -474,7 +459,7 @@ class RemnawaveManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def get_hosts(
@@ -493,8 +478,7 @@ class RemnawaveManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        hosts_data = data.get("response", [])
+        hosts_data = response.get("response", [])
         return [RemnawaveHost(**host_data) for host_data in hosts_data]
 
     @classmethod
@@ -516,8 +500,7 @@ class RemnawaveManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return RemnawaveHost(**data.get("response", data))
+        return RemnawaveHost(**response.get("response", response))
 
     @classmethod
     async def get_host(
@@ -537,8 +520,7 @@ class RemnawaveManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return RemnawaveHost(**data.get("response", data))
+        return RemnawaveHost(**response.get("response", response))
 
     @classmethod
     async def update_host(
@@ -565,8 +547,7 @@ class RemnawaveManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return RemnawaveHost(**data.get("response", data))
+        return RemnawaveHost(**response.get("response", response))
 
     @classmethod
     async def delete_host(
@@ -586,7 +567,7 @@ class RemnawaveManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def get_subscription_info(
@@ -604,8 +585,7 @@ class RemnawaveManager(RequestBase):
             url=f"{host.rstrip('/')}/api/sub/{short_uuid}/info",
             timeout=timeout,
         )
-        data = await response.json()
-        return RemnawaveSubscription(**data.get("response", data))
+        return RemnawaveSubscription(**response.get("response", response))
 
     @classmethod
     async def get_subscription_links(
@@ -625,8 +605,10 @@ class RemnawaveManager(RequestBase):
         else:
             url = f"{host.rstrip('/')}/api/sub/{short_uuid}"
 
-        response = await cls.get(url=url, timeout=timeout)
-        return await response.text()
+        async with ClientSession(timeout=ClientTimeout(total=timeout)) as session:
+            async with session.get(url=url) as response:
+                response.raise_for_status()
+                return await response.text()
 
     @classmethod
     async def get_system_stats(
@@ -645,5 +627,4 @@ class RemnawaveManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return RemnawaveSystemStats(**data.get("response", data))
+        return RemnawaveSystemStats(**response.get("response", response))

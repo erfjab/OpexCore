@@ -1,5 +1,5 @@
 from typing import Optional, Dict
-from aiohttp import ClientSession, ClientTimeout, ClientResponse
+from aiohttp import ClientSession, ClientTimeout
 
 
 class RequestBase:
@@ -12,7 +12,7 @@ class RequestBase:
         data: Optional[Dict] = None,
         headers: Optional[Dict] = None,
         timeout: int = 10,
-    ) -> ClientResponse:
+    ) -> Dict:
         """
         Perform an HTTP request and return the result.
         :param method: HTTP method (GET, POST, etc.)
@@ -21,7 +21,7 @@ class RequestBase:
         :param data: Request body data
         :param headers: Request headers
         :param timeout: Request timeout in seconds
-        :return: ClientResponse containing status and content
+        :return: Parsed JSON response
         """
         async with ClientSession(timeout=ClientTimeout(total=timeout)) as session:
             async with session.request(
@@ -32,7 +32,7 @@ class RequestBase:
                 headers=headers,
             ) as response:
                 response.raise_for_status()
-                return response
+                return await response.json()
 
     @classmethod
     async def get(
@@ -41,14 +41,14 @@ class RequestBase:
         params: Optional[Dict] = None,
         headers: Optional[Dict] = None,
         timeout: int = 10,
-    ) -> ClientResponse:
+    ) -> Dict:
         """
         Perform a GET request.
         :param url: URL to request
         :param params: Query parameters
         :param headers: Request headers
         :param timeout: Request timeout in seconds
-        :return: ClientResponse containing status and content
+        :return: Parsed JSON response
         """
         return await cls.fetch(
             method="GET",
@@ -66,14 +66,14 @@ class RequestBase:
         data: Optional[Dict] = None,
         headers: Optional[Dict] = None,
         timeout: int = 10,
-    ) -> ClientResponse:
+    ) -> Dict:
         """
         Perform a POST request.
         :param url: URL to request
         :param data: Request body data
         :param headers: Request headers
         :param timeout: Request timeout in seconds
-        :return: ClientResponse containing status and content
+        :return: Parsed JSON response
         """
         return await cls.fetch(
             method="POST",
@@ -92,13 +92,13 @@ class RequestBase:
         data: Optional[Dict] = None,
         headers: Optional[Dict] = None,
         timeout: int = 10,
-    ) -> ClientResponse:
+    ) -> Dict:
         """
         Perform a DELETE request.
         :param url: URL to request
         :param headers: Request headers
         :param timeout: Request timeout in seconds
-        :return: ClientResponse containing status and content
+        :return: Parsed JSON response
         """
         return await cls.fetch(
             method="DELETE",
@@ -117,14 +117,14 @@ class RequestBase:
         data: Optional[Dict] = None,
         headers: Optional[Dict] = None,
         timeout: int = 10,
-    ) -> ClientResponse:
+    ) -> Dict:
         """
         Perform a PUT request.
         :param url: URL to request
         :param data: Request body data
         :param headers: Request headers
         :param timeout: Request timeout in seconds
-        :return: ClientResponse containing status and content
+        :return: Parsed JSON response
         """
         return await cls.fetch(
             method="PUT",

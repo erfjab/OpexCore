@@ -59,8 +59,7 @@ class MarzbanManager(RequestBase):
             headers={"Content-Type": "application/x-www-form-urlencoded"},
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzbanToken(**data)
+        return MarzbanToken(**response)
 
     @classmethod
     async def get_current_admin(
@@ -79,8 +78,7 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzbanAdmin(**data)
+        return MarzbanAdmin(**response)
 
     @classmethod
     async def create_admin(
@@ -101,8 +99,7 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzbanAdmin(**data)
+        return MarzbanAdmin(**response)
 
     @classmethod
     async def modify_admin(
@@ -129,8 +126,7 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzbanAdmin(**data)
+        return MarzbanAdmin(**response)
 
     @classmethod
     async def remove_admin(
@@ -145,12 +141,11 @@ class MarzbanManager(RequestBase):
         :param timeout: Request timeout in seconds
         :return: Response data
         """
-        response = await cls.delete(
+        return await cls.delete(
             url=f"{host.rstrip('/')}/api/admin/{username}",
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
 
     @classmethod
     async def get_admins(
@@ -187,8 +182,7 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return [MarzbanAdmin(**item) for item in data]
+        return [MarzbanAdmin(**item) for item in response]
 
     @classmethod
     async def disable_all_active_users(
@@ -203,12 +197,11 @@ class MarzbanManager(RequestBase):
         :param timeout: Request timeout in seconds
         :return: Response data
         """
-        response = await cls.post(
+        return await cls.post(
             url=f"{host.rstrip('/')}/api/admin/{username}/users/disable",
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
 
     @classmethod
     async def activate_all_disabled_users(
@@ -223,12 +216,11 @@ class MarzbanManager(RequestBase):
         :param timeout: Request timeout in seconds
         :return: Response data
         """
-        response = await cls.post(
+        return await cls.post(
             url=f"{host.rstrip('/')}/api/admin/{username}/users/activate",
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
 
     @classmethod
     async def reset_admin_usage(
@@ -248,8 +240,7 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzbanAdmin(**data)
+        return MarzbanAdmin(**response)
 
     @classmethod
     async def get_admin_usage(
@@ -264,12 +255,11 @@ class MarzbanManager(RequestBase):
         :param timeout: Request timeout in seconds
         :return: Usage amount
         """
-        response = await cls.get(
+        return await cls.get(
             url=f"{host.rstrip('/')}/api/admin/usage/{username}",
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
 
     @classmethod
     async def get_core_stats(
@@ -288,8 +278,7 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzbanCoreStats(**data)
+        return MarzbanCoreStats(**response)
 
     @classmethod
     async def restart_core(
@@ -303,12 +292,11 @@ class MarzbanManager(RequestBase):
         :param timeout: Request timeout in seconds
         :return: Response data
         """
-        response = await cls.post(
+        return await cls.post(
             url=f"{host.rstrip('/')}/api/core/restart",
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
 
     @classmethod
     async def get_core_config(
@@ -322,12 +310,11 @@ class MarzbanManager(RequestBase):
         :param timeout: Request timeout in seconds
         :return: Core configuration
         """
-        response = await cls.get(
+        return await cls.get(
             url=f"{host.rstrip('/')}/api/core/config",
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
 
     @classmethod
     async def modify_core_config(
@@ -342,13 +329,12 @@ class MarzbanManager(RequestBase):
         :param timeout: Request timeout in seconds
         :return: Updated core configuration
         """
-        response = await cls.put(
+        return await cls.put(
             url=f"{host.rstrip('/')}/api/core/config",
             data=config,
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
 
     @classmethod
     async def get_node_settings(
@@ -367,8 +353,7 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzbanNodeSettings(**data)
+        return MarzbanNodeSettings(**response)
 
     @classmethod
     async def add_node(
@@ -389,8 +374,7 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzbanNodeResponse(**data)
+        return MarzbanNodeResponse(**response)
 
     @classmethod
     async def get_node(
@@ -410,8 +394,7 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzbanNodeResponse(**data)
+        return MarzbanNodeResponse(**response)
 
     @classmethod
     async def modify_node(
@@ -438,8 +421,7 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzbanNodeResponse(**data)
+        return MarzbanNodeResponse(**response)
 
     @classmethod
     async def remove_node(
@@ -454,12 +436,11 @@ class MarzbanManager(RequestBase):
         :param timeout: Request timeout in seconds
         :return: Response data
         """
-        response = await cls.delete(
+        return await cls.delete(
             url=f"{host.rstrip('/')}/api/node/{node_id}",
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
 
     @classmethod
     async def get_nodes(
@@ -478,8 +459,7 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return [MarzbanNodeResponse(**item) for item in data]
+        return [MarzbanNodeResponse(**item) for item in response]
 
     @classmethod
     async def reconnect_node(
@@ -494,12 +474,11 @@ class MarzbanManager(RequestBase):
         :param timeout: Request timeout in seconds
         :return: Response data
         """
-        response = await cls.post(
+        return await cls.post(
             url=f"{host.rstrip('/')}/api/node/{node_id}/reconnect",
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
 
     @classmethod
     async def get_nodes_usage(
@@ -527,8 +506,7 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzbanNodesUsageResponse(**data)
+        return MarzbanNodesUsageResponse(**response)
 
     @classmethod
     async def user_subscription(
@@ -547,12 +525,11 @@ class MarzbanManager(RequestBase):
         if user_agent:
             headers["user-agent"] = user_agent
 
-        response = await cls.get(
+        return await cls.get(
             url=f"{host.rstrip('/')}/sub/{token}/",
             headers=headers,
             timeout=timeout,
         )
-        return await response.json()
 
     @classmethod
     async def user_subscription_info(
@@ -570,8 +547,7 @@ class MarzbanManager(RequestBase):
             url=f"{host.rstrip('/')}/sub/{token}/info",
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzbanSubscriptionUserResponse(**data)
+        return MarzbanSubscriptionUserResponse(**response)
 
     @classmethod
     async def user_get_usage(
@@ -593,12 +569,11 @@ class MarzbanManager(RequestBase):
         :return: Usage data
         """
         params = {"start": start, "end": end}
-        response = await cls.get(
+        return await cls.get(
             url=f"{host.rstrip('/')}/sub/{token}/usage",
             params=params,
             timeout=timeout,
         )
-        return await response.json()
 
     @classmethod
     async def user_subscription_with_client_type(
@@ -623,12 +598,11 @@ class MarzbanManager(RequestBase):
         if user_agent:
             headers["user-agent"] = user_agent
 
-        response = await cls.get(
+        return await cls.get(
             url=f"{host.rstrip('/')}/sub/{token}/{client_type}",
             headers=headers,
             timeout=timeout,
         )
-        return await response.json()
 
     @classmethod
     async def get_system_stats(
@@ -647,8 +621,7 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzbanSystemStats(**data)
+        return MarzbanSystemStats(**response)
 
     @classmethod
     async def get_inbounds(
@@ -667,9 +640,8 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
         result = {}
-        for protocol, inbounds in data.items():
+        for protocol, inbounds in response.items():
             result[protocol] = [MarzbanProxyInbound(**inbound) for inbound in inbounds]
         return result
 
@@ -690,9 +662,8 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
         result = {}
-        for tag, hosts in data.items():
+        for tag, hosts in response.items():
             result[tag] = [MarzbanProxyHost(**host_data) for host_data in hosts]
         return result
 
@@ -723,9 +694,8 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        result_data = await response.json()
         result = {}
-        for tag, hosts in result_data.items():
+        for tag, hosts in response.items():
             result[tag] = [MarzbanProxyHost(**host_data) for host_data in hosts]
         return result
 
@@ -752,8 +722,7 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzbanUserTemplateResponse(**data)
+        return MarzbanUserTemplateResponse(**response)
 
     @classmethod
     async def get_user_templates(
@@ -786,8 +755,7 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return [MarzbanUserTemplateResponse(**item) for item in data]
+        return [MarzbanUserTemplateResponse(**item) for item in response]
 
     @classmethod
     async def get_user_template(
@@ -807,8 +775,7 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzbanUserTemplateResponse(**data)
+        return MarzbanUserTemplateResponse(**response)
 
     @classmethod
     async def modify_user_template(
@@ -835,8 +802,7 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzbanUserTemplateResponse(**data)
+        return MarzbanUserTemplateResponse(**response)
 
     @classmethod
     async def remove_user_template(
@@ -851,12 +817,11 @@ class MarzbanManager(RequestBase):
         :param timeout: Request timeout in seconds
         :return: Response data
         """
-        response = await cls.delete(
+        return await cls.delete(
             url=f"{host.rstrip('/')}/api/user_template/{template_id}",
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
 
     @classmethod
     async def add_user(
@@ -877,8 +842,7 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzbanUserResponse(**data)
+        return MarzbanUserResponse(**response)
 
     @classmethod
     async def get_user(
@@ -898,8 +862,7 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzbanUserResponse(**data)
+        return MarzbanUserResponse(**response)
 
     @classmethod
     async def modify_user(
@@ -926,8 +889,7 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzbanUserResponse(**data)
+        return MarzbanUserResponse(**response)
 
     @classmethod
     async def remove_user(
@@ -942,12 +904,11 @@ class MarzbanManager(RequestBase):
         :param timeout: Request timeout in seconds
         :return: Response data
         """
-        response = await cls.delete(
+        return await cls.delete(
             url=f"{host.rstrip('/')}/api/user/{username}",
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
 
     @classmethod
     async def reset_user_data_usage(
@@ -967,8 +928,7 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzbanUserResponse(**data)
+        return MarzbanUserResponse(**response)
 
     @classmethod
     async def revoke_user_subscription(
@@ -988,8 +948,7 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzbanUserResponse(**data)
+        return MarzbanUserResponse(**response)
 
     @classmethod
     async def get_users(
@@ -1042,8 +1001,7 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzbanUsersResponse(**data)
+        return MarzbanUsersResponse(**response)
 
     @classmethod
     async def reset_users_data_usage(
@@ -1057,12 +1015,11 @@ class MarzbanManager(RequestBase):
         :param timeout: Request timeout in seconds
         :return: Response data
         """
-        response = await cls.post(
+        return await cls.post(
             url=f"{host.rstrip('/')}/api/users/reset",
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
 
     @classmethod
     async def get_user_usage(
@@ -1092,8 +1049,7 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzbanUserUsagesResponse(**data)
+        return MarzbanUserUsagesResponse(**response)
 
     @classmethod
     async def active_next_plan(
@@ -1113,8 +1069,7 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzbanUserResponse(**data)
+        return MarzbanUserResponse(**response)
 
     @classmethod
     async def get_users_usage(
@@ -1147,8 +1102,7 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzbanUsersUsagesResponse(**data)
+        return MarzbanUsersUsagesResponse(**response)
 
     @classmethod
     async def set_owner(
@@ -1175,8 +1129,7 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzbanUserResponse(**data)
+        return MarzbanUserResponse(**response)
 
     @classmethod
     async def get_expired_users(
@@ -1209,7 +1162,7 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def delete_expired_users(
@@ -1242,4 +1195,4 @@ class MarzbanManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response

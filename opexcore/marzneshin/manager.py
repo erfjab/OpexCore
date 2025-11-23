@@ -62,8 +62,7 @@ class MarzneshinManager(RequestBase):
             headers={"Content-Type": "application/x-www-form-urlencoded"},
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinToken(**data)
+        return MarzneshinToken(**response)
 
     @classmethod
     async def get_current_admin(
@@ -82,8 +81,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinAdmin(**data)
+        return MarzneshinAdmin(**response)
 
     @classmethod
     async def get_admins(
@@ -116,8 +114,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return [MarzneshinAdminResponse(**admin) for admin in data.get("items", [])]
+        return [MarzneshinAdminResponse(**admin) for admin in response.get("items", [])]
 
     @classmethod
     async def create_admin(
@@ -134,12 +131,11 @@ class MarzneshinManager(RequestBase):
         """
         response = await cls.post(
             url=f"{host.rstrip('/')}/api/admins",
-            data=admin_data.dict(),
+            json=admin_data.dict(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinAdmin(**data)
+        return MarzneshinAdmin(**response)
 
     @classmethod
     async def get_admin(
@@ -159,8 +155,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinAdminResponse(**data)
+        return MarzneshinAdminResponse(**response)
 
     @classmethod
     async def modify_admin(
@@ -183,12 +178,11 @@ class MarzneshinManager(RequestBase):
         """
         response = await cls.put(
             url=f"{host.rstrip('/')}/api/admins/{username}",
-            data=admin_data.dict(exclude_none=True),
+            json=admin_data.dict(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinAdminResponse(**data)
+        return MarzneshinAdminResponse(**response)
 
     @classmethod
     async def remove_admin(
@@ -208,7 +202,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def get_admin_services(
@@ -238,9 +232,9 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
         return [
-            MarzneshinServiceResponse(**service) for service in data.get("items", [])
+            MarzneshinServiceResponse(**service)
+            for service in response.get("items", [])
         ]
 
     @classmethod
@@ -271,8 +265,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return [MarzneshinUserResponse(**user) for user in data.get("items", [])]
+        return [MarzneshinUserResponse(**user) for user in response.get("items", [])]
 
     @classmethod
     async def disable_admin_users(
@@ -292,8 +285,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinAdminResponse(**data)
+        return MarzneshinAdminResponse(**response)
 
     @classmethod
     async def enable_admin_users(
@@ -313,8 +305,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinAdminResponse(**data)
+        return MarzneshinAdminResponse(**response)
 
     @classmethod
     async def get_nodes(
@@ -351,8 +342,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return [MarzneshinNodeResponse(**node) for node in data.get("items", [])]
+        return [MarzneshinNodeResponse(**node) for node in response.get("items", [])]
 
     @classmethod
     async def add_node(
@@ -369,12 +359,11 @@ class MarzneshinManager(RequestBase):
         """
         response = await cls.post(
             url=f"{host.rstrip('/')}/api/nodes",
-            data=node_data.dict(),
+            json=node_data.dict(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinNodeResponse(**data)
+        return MarzneshinNodeResponse(**response)
 
     @classmethod
     async def get_node_settings(
@@ -393,8 +382,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinNodeSettings(**data)
+        return MarzneshinNodeSettings(**response)
 
     @classmethod
     async def get_node(
@@ -414,8 +402,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinNodeResponse(**data)
+        return MarzneshinNodeResponse(**response)
 
     @classmethod
     async def modify_node(
@@ -438,12 +425,11 @@ class MarzneshinManager(RequestBase):
         """
         response = await cls.put(
             url=f"{host.rstrip('/')}/api/nodes/{node_id}",
-            data=node_data.dict(exclude_none=True),
+            json=node_data.dict(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinNodeResponse(**data)
+        return MarzneshinNodeResponse(**response)
 
     @classmethod
     async def remove_node(
@@ -463,7 +449,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def reconnect_node(
@@ -483,7 +469,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def get_node_usage(
@@ -518,8 +504,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinTrafficUsageSeries(**data)
+        return MarzneshinTrafficUsageSeries(**response)
 
     @classmethod
     async def get_backend_stats(
@@ -540,8 +525,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinBackendStats(**data)
+        return MarzneshinBackendStats(**response)
 
     @classmethod
     async def get_node_backend_config(
@@ -562,8 +546,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinBackendConfig(**data)
+        return MarzneshinBackendConfig(**response)
 
     @classmethod
     async def alter_node_backend_config(
@@ -588,11 +571,11 @@ class MarzneshinManager(RequestBase):
         """
         response = await cls.put(
             url=f"{host.rstrip('/')}/api/nodes/{node_id}/{backend}/config",
-            data=config_data.dict(),
+            json=config_data.dict(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def get_services(
@@ -625,9 +608,9 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
         return [
-            MarzneshinServiceResponse(**service) for service in data.get("items", [])
+            MarzneshinServiceResponse(**service)
+            for service in response.get("items", [])
         ]
 
     @classmethod
@@ -649,12 +632,11 @@ class MarzneshinManager(RequestBase):
         """
         response = await cls.post(
             url=f"{host.rstrip('/')}/api/services",
-            data=service_data.dict(),
+            json=service_data.dict(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinServiceResponse(**data)
+        return MarzneshinServiceResponse(**response)
 
     @classmethod
     async def get_service(
@@ -674,8 +656,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinServiceResponse(**data)
+        return MarzneshinServiceResponse(**response)
 
     @classmethod
     async def modify_service(
@@ -698,12 +679,11 @@ class MarzneshinManager(RequestBase):
         """
         response = await cls.put(
             url=f"{host.rstrip('/')}/api/services/{service_id}",
-            data=service_data.dict(exclude_none=True),
+            json=service_data.dict(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinServiceResponse(**data)
+        return MarzneshinServiceResponse(**response)
 
     @classmethod
     async def remove_service(
@@ -723,7 +703,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def get_service_users(
@@ -753,8 +733,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return [MarzneshinUserResponse(**user) for user in data.get("items", [])]
+        return [MarzneshinUserResponse(**user) for user in response.get("items", [])]
 
     @classmethod
     async def get_service_inbounds(
@@ -784,8 +763,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return [MarzneshinInbound(**inbound) for inbound in data.get("items", [])]
+        return [MarzneshinInbound(**inbound) for inbound in response.get("items", [])]
 
     @classmethod
     async def get_inbounds(
@@ -818,8 +796,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return [MarzneshinInbound(**inbound) for inbound in data.get("items", [])]
+        return [MarzneshinInbound(**inbound) for inbound in response.get("items", [])]
 
     @classmethod
     async def get_inbound(
@@ -839,8 +816,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinInbound(**data)
+        return MarzneshinInbound(**response)
 
     @classmethod
     async def get_hosts(
@@ -863,8 +839,9 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return [MarzneshinInboundHostResponse(**host) for host in data.get("items", [])]
+        return [
+            MarzneshinInboundHostResponse(**host) for host in response.get("items", [])
+        ]
 
     @classmethod
     async def create_unbound_host(
@@ -885,12 +862,11 @@ class MarzneshinManager(RequestBase):
         """
         response = await cls.post(
             url=f"{host.rstrip('/')}/api/inbounds/hosts",
-            data=host_data.dict(),
+            json=host_data.dict(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinInboundHostResponse(**data)
+        return MarzneshinInboundHostResponse(**response)
 
     @classmethod
     async def get_host(
@@ -910,8 +886,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinInboundHostResponse(**data)
+        return MarzneshinInboundHostResponse(**response)
 
     @classmethod
     async def update_host(
@@ -934,12 +909,11 @@ class MarzneshinManager(RequestBase):
         """
         response = await cls.put(
             url=f"{host.rstrip('/')}/api/inbounds/hosts/{host_id}",
-            data=host_data.dict(),
+            json=host_data.dict(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinInboundHostResponse(**data)
+        return MarzneshinInboundHostResponse(**response)
 
     @classmethod
     async def delete_host(
@@ -959,7 +933,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def get_inbound_hosts(
@@ -989,8 +963,9 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return [MarzneshinInboundHostResponse(**host) for host in data.get("items", [])]
+        return [
+            MarzneshinInboundHostResponse(**host) for host in response.get("items", [])
+        ]
 
     @classmethod
     async def create_inbound_host(
@@ -1013,12 +988,11 @@ class MarzneshinManager(RequestBase):
         """
         response = await cls.post(
             url=f"{host.rstrip('/')}/api/inbounds/{inbound_id}/hosts",
-            data=host_data.dict(),
+            json=host_data.dict(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinInboundHostResponse(**data)
+        return MarzneshinInboundHostResponse(**response)
 
     @classmethod
     async def get_users(
@@ -1081,8 +1055,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return [MarzneshinUserResponse(**user) for user in data.get("items", [])]
+        return [MarzneshinUserResponse(**user) for user in response.get("items", [])]
 
     @classmethod
     async def add_user(
@@ -1099,12 +1072,11 @@ class MarzneshinManager(RequestBase):
         """
         response = await cls.post(
             url=f"{host.rstrip('/')}/api/users",
-            data=user_data.dict(),
+            json=user_data.dict(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinUserResponse(**data)
+        return MarzneshinUserResponse(**response)
 
     @classmethod
     async def reset_users_data_usage(
@@ -1123,7 +1095,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def delete_expired_users(
@@ -1145,7 +1117,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def get_user(
@@ -1165,8 +1137,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinUserResponse(**data)
+        return MarzneshinUserResponse(**response)
 
     @classmethod
     async def modify_user(
@@ -1189,12 +1160,11 @@ class MarzneshinManager(RequestBase):
         """
         response = await cls.put(
             url=f"{host.rstrip('/')}/api/users/{username}",
-            data=user_data.dict(exclude_none=True),
+            json=user_data.dict(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinUserResponse(**data)
+        return MarzneshinUserResponse(**response)
 
     @classmethod
     async def remove_user(
@@ -1214,7 +1184,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def get_user_services(
@@ -1244,9 +1214,9 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
         return [
-            MarzneshinServiceResponse(**service) for service in data.get("items", [])
+            MarzneshinServiceResponse(**service)
+            for service in response.get("items", [])
         ]
 
     @classmethod
@@ -1267,8 +1237,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinUserResponse(**data)
+        return MarzneshinUserResponse(**response)
 
     @classmethod
     async def enable_user(
@@ -1288,8 +1257,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinUserResponse(**data)
+        return MarzneshinUserResponse(**response)
 
     @classmethod
     async def disable_user(
@@ -1309,8 +1277,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinUserResponse(**data)
+        return MarzneshinUserResponse(**response)
 
     @classmethod
     async def revoke_user_subscription(
@@ -1330,8 +1297,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinUserResponse(**data)
+        return MarzneshinUserResponse(**response)
 
     @classmethod
     async def get_user_usage(
@@ -1366,8 +1332,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinUserUsageSeriesResponse(**data)
+        return MarzneshinUserUsageSeriesResponse(**response)
 
     @classmethod
     async def set_user_owner(
@@ -1395,8 +1360,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinUserResponse(**data)
+        return MarzneshinUserResponse(**response)
 
     @classmethod
     async def user_subscription(
@@ -1421,7 +1385,7 @@ class MarzneshinManager(RequestBase):
             headers=headers,
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def user_subscription_info(
@@ -1440,8 +1404,7 @@ class MarzneshinManager(RequestBase):
             url=f"{host.rstrip('/')}/sub/{username}/{key}/info",
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinUserResponse(**data)
+        return MarzneshinUserResponse(**response)
 
     @classmethod
     async def user_subscription_usage(
@@ -1475,8 +1438,7 @@ class MarzneshinManager(RequestBase):
             params=params,
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinTrafficUsageSeries(**data)
+        return MarzneshinTrafficUsageSeries(**response)
 
     @classmethod
     async def user_subscription_with_client_type(
@@ -1501,7 +1463,7 @@ class MarzneshinManager(RequestBase):
             url=f"{host.rstrip('/')}/sub/{username}/{key}/{client_type}",
             timeout=timeout,
         )
-        return await response.json()
+        return response
 
     @classmethod
     async def get_subscription_settings(
@@ -1520,8 +1482,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinSubscriptionSettings(**data)
+        return MarzneshinSubscriptionSettings(**response)
 
     @classmethod
     async def update_subscription_settings(
@@ -1542,12 +1503,11 @@ class MarzneshinManager(RequestBase):
         """
         response = await cls.put(
             url=f"{host.rstrip('/')}/api/system/settings/subscription",
-            data=settings_data.dict(),
+            json=settings_data.dict(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinSubscriptionSettings(**data)
+        return MarzneshinSubscriptionSettings(**response)
 
     @classmethod
     async def get_telegram_settings(
@@ -1566,8 +1526,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinTelegramSettings(**data) if data else None
+        return MarzneshinTelegramSettings(**response) if response else None
 
     @classmethod
     async def update_telegram_settings(
@@ -1588,12 +1547,11 @@ class MarzneshinManager(RequestBase):
         """
         response = await cls.put(
             url=f"{host.rstrip('/')}/api/system/settings/telegram",
-            data=settings_data.dict() if settings_data else None,
+            json=settings_data.dict(exclude_none=True) if settings_data else None,
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinTelegramSettings(**data) if data else None
+        return MarzneshinTelegramSettings(**response) if response else None
 
     @classmethod
     async def get_admins_stats(
@@ -1612,8 +1570,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinAdminsStats(**data)
+        return MarzneshinAdminsStats(**response)
 
     @classmethod
     async def get_nodes_stats(
@@ -1632,8 +1589,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinNodesStats(**data)
+        return MarzneshinNodesStats(**response)
 
     @classmethod
     async def get_total_traffic_stats(
@@ -1666,8 +1622,7 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinTrafficUsageSeries(**data)
+        return MarzneshinTrafficUsageSeries(**response)
 
     @classmethod
     async def get_users_stats(
@@ -1686,5 +1641,4 @@ class MarzneshinManager(RequestBase):
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        data = await response.json()
-        return MarzneshinUsersStats(**data)
+        return MarzneshinUsersStats(**response)
