@@ -95,7 +95,7 @@ class MarzbanManager(RequestBase):
         """
         response = await cls.post(
             url=f"{host.rstrip('/')}/api/admin",
-            data=admin_data.dict(),
+            data=admin_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -122,7 +122,7 @@ class MarzbanManager(RequestBase):
         """
         response = await cls.put(
             url=f"{host.rstrip('/')}/api/admin/{username}",
-            data=admin_data.dict(),
+            data=admin_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -370,7 +370,7 @@ class MarzbanManager(RequestBase):
         """
         response = await cls.post(
             url=f"{host.rstrip('/')}/api/node",
-            data=node_data.dict(),
+            data=node_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -417,7 +417,7 @@ class MarzbanManager(RequestBase):
         """
         response = await cls.put(
             url=f"{host.rstrip('/')}/api/node/{node_id}",
-            data=node_data.dict(),
+            data=node_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -686,7 +686,9 @@ class MarzbanManager(RequestBase):
         """
         data = {}
         for tag, hosts in modified_hosts.items():
-            data[tag] = [host_obj.dict() for host_obj in hosts]
+            data[tag] = [
+                host_obj.model_dump_json(exclude_none=True) for host_obj in hosts
+            ]
 
         response = await cls.put(
             url=f"{host.rstrip('/')}/api/hosts",
@@ -718,7 +720,7 @@ class MarzbanManager(RequestBase):
         """
         response = await cls.post(
             url=f"{host.rstrip('/')}/api/user_template",
-            data=template_data.dict(),
+            data=template_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -798,7 +800,7 @@ class MarzbanManager(RequestBase):
         """
         response = await cls.put(
             url=f"{host.rstrip('/')}/api/user_template/{template_id}",
-            data=template_data.dict(),
+            data=template_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -838,7 +840,7 @@ class MarzbanManager(RequestBase):
         """
         response = await cls.post(
             url=f"{host.rstrip('/')}/api/user",
-            data=user_data.dict(),
+            data=user_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -885,7 +887,7 @@ class MarzbanManager(RequestBase):
         """
         response = await cls.put(
             url=f"{host.rstrip('/')}/api/user/{username}",
-            data=user_data.dict(),
+            data=user_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )

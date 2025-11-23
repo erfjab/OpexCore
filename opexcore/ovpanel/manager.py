@@ -79,7 +79,7 @@ class OVPanelManager(RequestBase):
         """
         response = await cls.post(
             url=f"{host.rstrip('/')}/api/user/create",
-            data=user_data.dict(),
+            data=user_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -100,7 +100,7 @@ class OVPanelManager(RequestBase):
         """
         response = await cls.put(
             url=f"{host.rstrip('/')}/api/user/update",
-            data=user_data.dict(),
+            data=user_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -121,7 +121,7 @@ class OVPanelManager(RequestBase):
         """
         response = await cls.put(
             url=f"{host.rstrip('/')}/api/user/change-status",
-            data=user_data.dict(),
+            data=user_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -200,7 +200,7 @@ class OVPanelManager(RequestBase):
         """
         response = await cls.post(
             url=f"{host.rstrip('/')}/api/node/add",
-            data=node_data.dict(),
+            data=node_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -227,7 +227,7 @@ class OVPanelManager(RequestBase):
         """
         response = await cls.put(
             url=f"{host.rstrip('/')}/api/node/update/{address}",
-            data=node_data.dict(),
+            data=node_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
