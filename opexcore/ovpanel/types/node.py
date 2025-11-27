@@ -27,6 +27,7 @@ class OVPanelNodeStatus(BaseModel):
 class OVPanelNode(BaseModel):
     """Node response schema"""
 
+    id: int = Field(..., title="ID")
     name: str = Field(..., title="Name")
     address: str = Field(..., title="Address")
     tunnel_address: Optional[str] = Field(None, title="Tunnel Address")

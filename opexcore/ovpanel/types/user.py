@@ -21,6 +21,7 @@ class OVPanelUpdateUser(BaseModel):
 class OVPanelUser(BaseModel):
     """User response schema"""
 
+    uuid: str = Field(..., title="UUID")
     name: str = Field(..., title="Name")
     expiry_date: date = Field(..., title="Expiry Date")
     status: bool = Field(..., title="Status")
