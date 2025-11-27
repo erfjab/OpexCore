@@ -42,23 +42,30 @@ async def main():
         expiry_date=date.today() + timedelta(days=30),
     )
     create_response = await OVPanelManager.create_user(HOST, token, new_user)
+    user_uuid = None
     if create_response.success:
         print(f"✅ User created: {create_response.msg}")
+        if create_response.data and isinstance(create_response.data, dict):
+            user_uuid = create_response.data.get("uuid")
+            print(f"   User UUID: {user_uuid}")
     else:
         print(f"❌ {create_response.msg}")
 
     # Step 4: Update user status
-    print("\n🔄 Updating user status...")
-    update_user = OVPanelUpdateUser(
-        name="testuser",
-        expiry_date=date.today() + timedelta(days=60),
-        status=True,
-    )
-    update_response = await OVPanelManager.change_user_status(HOST, token, update_user)
-    if update_response.success:
-        print(f"✅ User updated: {update_response.msg}")
-    else:
-        print(f"❌ {update_response.msg}")
+    if user_uuid:
+        print("\n🔄 Updating user status...")
+        update_user = OVPanelUpdateUser(
+            name="testuser",
+            expiry_date=date.today() + timedelta(days=60),
+            status=True,
+        )
+        update_response = await OVPanelManager.change_user_status(
+            HOST, token, user_uuid, update_user
+        )
+        if update_response.success:
+            print(f"✅ User updated: {update_response.msg}")
+        else:
+            print(f"❌ {update_response.msg}")
 
     # Step 5: Get all nodes
     print("\n🌐 Getting all nodes...")
@@ -82,25 +89,28 @@ async def main():
         status=True,
     )
     node_response = await OVPanelManager.add_node(HOST, token, new_node)
+    node_id = None
     if node_response.success:
         print(f"✅ Node added: {node_response.msg}")
+        if node_response.data and isinstance(node_response.data, dict):
+            node_id = node_response.data.get("id")
+            print(f"   Node ID: {node_id}")
     else:
         print(f"❌ {node_response.msg}")
 
     # Step 7: Get node status
-    print("\n📊 Getting node status...")
-    try:
-        status_response = await OVPanelManager.get_node_status(
-            HOST, token, "192.168.1.100"
-        )
-        if status_response.success:
-            print(f"✅ Node status: {status_response.msg}")
-            if status_response.data:
-                print(f"   Status data: {status_response.data}")
-        else:
-            print(f"❌ {status_response.msg}")
-    except Exception as e:
-        print(f"❌ Error getting node status: {e}")
+    if node_id:
+        print("\n📊 Getting node status...")
+        try:
+            status_response = await OVPanelManager.get_node_status(HOST, token, node_id)
+            if status_response.success:
+                print(f"✅ Node status: {status_response.msg}")
+                if status_response.data:
+                    print(f"   Status data: {status_response.data}")
+            else:
+                print(f"❌ {status_response.msg}")
+        except Exception as e:
+            print(f"❌ Error getting node status: {e}")
 
     # Step 8: Get panel settings
     print("\n⚙️ Getting panel settings...")
@@ -133,25 +143,30 @@ async def main():
         print(f"❌ {admins_response.msg}")
 
     # Step 11: Delete user (cleanup)
-    print("\n🗑️ Deleting test user...")
-    try:
-        await OVPanelManager.delete_user(HOST, token, "testuser")
-        print("✅ User deleted successfully")
-    except Exception as e:
-        print(f"❌ Error deleting user: {e}")
+    if user_uuid:
+        print("\n🗑️ Deleting test user...")
+        try:
+            delete_response = await OVPanelManager.delete_user(HOST, token, user_uuid)
+            if delete_response.success:
+                print(f"✅ User deleted: {delete_response.msg}")
+            else:
+                print(f"❌ {delete_response.msg}")
+        except Exception as e:
+            print(f"❌ Error deleting user: {e}")
 
     # Step 12: Delete node (cleanup)
-    print("\n🗑️ Deleting test node...")
-    try:
-        delete_node_response = await OVPanelManager.delete_node(
-            HOST, token, "192.168.1.100"
-        )
-        if delete_node_response.success:
-            print(f"✅ Node deleted: {delete_node_response.msg}")
-        else:
-            print(f"❌ {delete_node_response.msg}")
-    except Exception as e:
-        print(f"❌ Error deleting node: {e}")
+    if node_id:
+        print("\n🗑️ Deleting test node...")
+        try:
+            delete_node_response = await OVPanelManager.delete_node(
+                HOST, token, node_id
+            )
+            if delete_node_response.success:
+                print(f"✅ Node deleted: {delete_node_response.msg}")
+            else:
+                print(f"❌ {delete_node_response.msg}")
+        except Exception as e:
+            print(f"❌ Error deleting node: {e}")
 
     print("\n✨ All operations completed!")
 

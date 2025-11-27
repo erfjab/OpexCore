@@ -7,9 +7,6 @@ from .types import (
     OVPanelUpdateUser,
     OVPanelResponseModel,
     OVPanelNodeCreate,
-    OVPanelNodeStatus,
-    OVPanelSettings,
-    OVPanelServerInfo,
 )
 
 
@@ -58,7 +55,7 @@ class OVPanelManager(RequestBase):
         :return: Response with list of users
         """
         response = await cls.get(
-            url=f"{host.rstrip('/')}/api/user/all",
+            url=f"{host.rstrip('/')}/api/users/",
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -78,7 +75,7 @@ class OVPanelManager(RequestBase):
         :return: Response with created user
         """
         response = await cls.post(
-            url=f"{host.rstrip('/')}/api/user/create",
+            url=f"{host.rstrip('/')}/api/users/",
             data=user_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
@@ -87,40 +84,52 @@ class OVPanelManager(RequestBase):
 
     @classmethod
     async def update_user(
-        cls, host: str, token: str, user_data: OVPanelUpdateUser, timeout: int = 10
-    ) -> Dict[str, Any]:
+        cls,
+        host: str,
+        token: str,
+        uuid: str,
+        user_data: OVPanelUpdateUser,
+        timeout: int = 10,
+    ) -> OVPanelResponseModel:
         """
         Update an existing user.
 
         :param host: API host URL
         :param token: Authentication token
+        :param uuid: User UUID
         :param user_data: User update data
         :param timeout: Request timeout in seconds
         :return: Response data
         """
         response = await cls.put(
-            url=f"{host.rstrip('/')}/api/user/update",
+            url=f"{host.rstrip('/')}/api/users/{uuid}",
             data=user_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return response
+        return OVPanelResponseModel(**response)
 
     @classmethod
     async def change_user_status(
-        cls, host: str, token: str, user_data: OVPanelUpdateUser, timeout: int = 10
+        cls,
+        host: str,
+        token: str,
+        uuid: str,
+        user_data: OVPanelUpdateUser,
+        timeout: int = 10,
     ) -> OVPanelResponseModel:
         """
         Change the status of a user.
 
         :param host: API host URL
         :param token: Authentication token
+        :param uuid: User UUID
         :param user_data: User update data with status
         :param timeout: Request timeout in seconds
         :return: Response with updated user
         """
         response = await cls.put(
-            url=f"{host.rstrip('/')}/api/user/change-status",
+            url=f"{host.rstrip('/')}/api/users/{uuid}/status",
             data=user_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
@@ -129,28 +138,28 @@ class OVPanelManager(RequestBase):
 
     @classmethod
     async def delete_user(
-        cls, host: str, token: str, name: str, timeout: int = 10
-    ) -> Dict[str, Any]:
+        cls, host: str, token: str, uuid: str, timeout: int = 10
+    ) -> OVPanelResponseModel:
         """
-        Delete a user by name.
+        Delete a user by UUID.
 
         :param host: API host URL
         :param token: Authentication token
-        :param name: Username to delete
+        :param uuid: User UUID to delete
         :param timeout: Request timeout in seconds
         :return: Response data
         """
         response = await cls.delete(
-            url=f"{host.rstrip('/')}/api/user/delete/{name}",
+            url=f"{host.rstrip('/')}/api/users/{uuid}",
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return response
+        return OVPanelResponseModel(**response)
 
     @classmethod
     async def get_settings(
         cls, host: str, token: str, timeout: int = 10
-    ) -> OVPanelSettings:
+    ) -> OVPanelResponseModel:
         """
         Get panel settings.
 
@@ -160,16 +169,16 @@ class OVPanelManager(RequestBase):
         :return: Panel settings
         """
         response = await cls.get(
-            url=f"{host.rstrip('/')}/api/settings/",
+            url=f"{host.rstrip('/')}/api/server/settings",
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return OVPanelSettings(**response)
+        return OVPanelResponseModel(**response)
 
     @classmethod
     async def get_server_info(
         cls, host: str, token: str, timeout: int = 10
-    ) -> OVPanelServerInfo:
+    ) -> OVPanelResponseModel:
         """
         Get server information (CPU, memory, etc.).
 
@@ -179,11 +188,11 @@ class OVPanelManager(RequestBase):
         :return: Server information
         """
         response = await cls.get(
-            url=f"{host.rstrip('/')}/api/settings/server/info",
+            url=f"{host.rstrip('/')}/api/server/info",
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return OVPanelServerInfo(**response)
+        return OVPanelResponseModel(**response)
 
     @classmethod
     async def add_node(
@@ -199,7 +208,7 @@ class OVPanelManager(RequestBase):
         :return: Response with created node
         """
         response = await cls.post(
-            url=f"{host.rstrip('/')}/api/node/add",
+            url=f"{host.rstrip('/')}/api/nodes/",
             data=node_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
@@ -211,7 +220,7 @@ class OVPanelManager(RequestBase):
         cls,
         host: str,
         token: str,
-        address: str,
+        node_id: int,
         node_data: OVPanelNodeCreate,
         timeout: int = 10,
     ) -> OVPanelResponseModel:
@@ -220,13 +229,13 @@ class OVPanelManager(RequestBase):
 
         :param host: API host URL
         :param token: Authentication token
-        :param address: Node address to update
+        :param node_id: Node ID to update
         :param node_data: Node update data
         :param timeout: Request timeout in seconds
         :return: Response with updated node
         """
         response = await cls.put(
-            url=f"{host.rstrip('/')}/api/node/update/{address}",
+            url=f"{host.rstrip('/')}/api/nodes/{node_id}",
             data=node_data.model_dump_json(exclude_none=True),
             headers=cls._generate_headers(token),
             timeout=timeout,
@@ -235,23 +244,23 @@ class OVPanelManager(RequestBase):
 
     @classmethod
     async def get_node_status(
-        cls, host: str, token: str, address: str, timeout: int = 10
-    ) -> OVPanelNodeStatus:
+        cls, host: str, token: str, node_id: int, timeout: int = 10
+    ) -> OVPanelResponseModel:
         """
         Get the status of a specific node.
 
         :param host: API host URL
         :param token: Authentication token
-        :param address: Node address
+        :param node_id: Node ID
         :param timeout: Request timeout in seconds
         :return: Node status response
         """
         response = await cls.get(
-            url=f"{host.rstrip('/')}/api/node/status/{address}",
+            url=f"{host.rstrip('/')}/api/nodes/{node_id}/status/",
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return OVPanelNodeStatus(**response)
+        return OVPanelResponseModel(**response)
 
     @classmethod
     async def list_nodes(
@@ -266,7 +275,7 @@ class OVPanelManager(RequestBase):
         :return: Response with list of nodes
         """
         response = await cls.get(
-            url=f"{host.rstrip('/')}/api/node/list",
+            url=f"{host.rstrip('/')}/api/nodes/",
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -274,21 +283,21 @@ class OVPanelManager(RequestBase):
 
     @classmethod
     async def download_ovpn_client(
-        cls, host: str, token: str, address: str, name: str, timeout: int = 10
+        cls, host: str, token: str, uuid: str, node_id: int, timeout: int = 10
     ) -> bytes:
         """
         Download OVPN client configuration from a node.
 
         :param host: API host URL
         :param token: Authentication token
-        :param address: Node address
-        :param name: Client name
+        :param uuid: User UUID
+        :param node_id: Node ID
         :param timeout: Request timeout in seconds
         :return: OVPN configuration file content
         """
         async with ClientSession(timeout=ClientTimeout(total=timeout)) as session:
             async with session.get(
-                url=f"{host.rstrip('/')}/api/node/download/ovpn/{address}/{name}",
+                url=f"{host.rstrip('/')}/api/nodes/ovpn/{uuid}/{node_id}",
                 headers=cls._generate_headers(token),
             ) as response:
                 response.raise_for_status()
@@ -296,19 +305,19 @@ class OVPanelManager(RequestBase):
 
     @classmethod
     async def delete_node(
-        cls, host: str, token: str, address: str, timeout: int = 10
+        cls, host: str, token: str, node_id: int, timeout: int = 10
     ) -> OVPanelResponseModel:
         """
-        Delete a node by address.
+        Delete a node by ID.
 
         :param host: API host URL
         :param token: Authentication token
-        :param address: Node address to delete
+        :param node_id: Node ID to delete
         :param timeout: Request timeout in seconds
         :return: Response data
         """
         response = await cls.delete(
-            url=f"{host.rstrip('/')}/api/node/delete/{address}",
+            url=f"{host.rstrip('/')}/api/nodes/{node_id}",
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -327,8 +336,46 @@ class OVPanelManager(RequestBase):
         :return: Response with list of admins
         """
         response = await cls.get(
-            url=f"{host.rstrip('/')}/api/admin/all",
+            url=f"{host.rstrip('/')}/api/admins/",
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
         return OVPanelResponseModel(**response)
+
+    @classmethod
+    async def get_subscription(
+        cls, host: str, uuid: str, timeout: int = 10
+    ) -> Dict[str, Any]:
+        """
+        Get subscription details.
+
+        :param host: API host URL
+        :param uuid: Subscription UUID
+        :param timeout: Request timeout in seconds
+        :return: Subscription details
+        """
+        response = await cls.get(
+            url=f"{host.rstrip('/')}/sub/{uuid}",
+            timeout=timeout,
+        )
+        return response
+
+    @classmethod
+    async def download_subscription(
+        cls, host: str, uuid: str, node_name: str, timeout: int = 10
+    ) -> bytes:
+        """
+        Download subscription OVPN file.
+
+        :param host: API host URL
+        :param uuid: Subscription UUID
+        :param node_name: Node name
+        :param timeout: Request timeout in seconds
+        :return: OVPN file content
+        """
+        async with ClientSession(timeout=ClientTimeout(total=timeout)) as session:
+            async with session.get(
+                url=f"{host.rstrip('/')}/sub/download/{uuid}/{node_name}",
+            ) as response:
+                response.raise_for_status()
+                return await response.read()
