@@ -5,6 +5,7 @@ from .guard import GuardManager
 from .pasarguard import PasarGuardManager
 from .remnawave import RemnawaveManager
 from .ovpanel import OVPanelManager
+from .rustneshin import RustneshinManager
 
 __all__ = [
     "RequestBase",
@@ -14,4 +15,5 @@ __all__ = [
     "PasarGuardManager",
     "RemnawaveManager",
     "OVPanelManager",
+    "RustneshinManager",
 ]

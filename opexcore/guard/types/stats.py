@@ -152,7 +152,9 @@ class GuardUsageSubscriptionDetail(BaseModel):
 class GuardMostUsageSubscription(BaseModel):
     """Most usage subscription response"""
 
-    subscriptions: List[GuardUsageSubscriptionDetail] = Field(..., title="Subscriptions")
+    subscriptions: List[GuardUsageSubscriptionDetail] = Field(
+        ..., title="Subscriptions"
+    )
     start_date: datetime = Field(..., title="Start Date")
     end_date: datetime = Field(..., title="End Date")
 
