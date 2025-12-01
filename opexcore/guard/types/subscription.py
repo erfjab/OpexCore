@@ -11,14 +11,17 @@ class GuardSubscriptionCreate(BaseModel):
     limit_expire: int = Field(..., title="Limit Expire")
     service_ids: List[int] = Field(..., title="Service Ids")
     access_key: Optional[str] = Field(None, title="Access Key")
+    note: Optional[str] = Field(None, title="Note")
 
 
 class GuardSubscriptionUpdate(BaseModel):
     """Schema for updating an existing subscription"""
 
+    username: Optional[str] = Field(None, title="Username")
     limit_usage: Optional[int] = Field(None, title="Limit Usage")
     limit_expire: Optional[int] = Field(None, title="Limit Expire")
     service_ids: Optional[List[int]] = Field(None, title="Service Ids")
+    note: Optional[str] = Field(None, title="Note")
 
 
 class GuardSubscriptionResponse(BaseModel):
@@ -42,6 +45,7 @@ class GuardSubscriptionResponse(BaseModel):
     current_usage: int = Field(..., title="Current Usage")
     limit_expire: int = Field(..., title="Limit Expire")
     service_ids: List[int] = Field(..., title="Service Ids")
+    note: Optional[str] = Field(None, title="Note")
     online_at: Optional[datetime] = Field(..., title="Online At")
     last_reset_at: Optional[datetime] = Field(..., title="Last Reset At")
     last_revoke_at: Optional[datetime] = Field(..., title="Last Revoke At")

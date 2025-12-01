@@ -21,6 +21,10 @@ from .types import (
     GuardSubscriptionStatsResponse,
     GuardSubscriptionUpdate,
     GuardSubscriptionUsageLogsResponse,
+    GuardSubscriptionStatusStatsResponse,
+    GuardMostUsageSubscription,
+    GuardUsageStatsResponse,
+    GuardAgentStatsResponse,
 )
 
 
@@ -86,42 +90,88 @@ class GuardManager(RequestBase):
         return GuardSubscriptionUsageLogsResponse(**response)
 
     @classmethod
-    async def get_stats(
+    async def get_subscription_status_stats(
         cls, host: str, token: str, timeout: int = 10
-    ) -> GuardStatsResponse:
+    ) -> GuardSubscriptionStatusStatsResponse:
         """
-        Get general statistics.
+        Get subscription status statistics.
 
         :param host: API host URL
         :param token: Authentication token
         :param timeout: Request timeout in seconds
-        :return: Stats response
+        :return: Subscription status stats response
         """
         response = await cls.get(
-            url=f"{host.rstrip('/')}/api/stats",
+            url=f"{host.rstrip('/')}/api/stats/subscriptions/status",
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return GuardStatsResponse(**response)
+        return GuardSubscriptionStatusStatsResponse(**response)
 
     @classmethod
-    async def get_admin_stats(
-        cls, host: str, token: str, timeout: int = 10
-    ) -> AdminStatsResponseNew:
+    async def get_most_usage_subscriptions(
+        cls, host: str, token: str, start_date: str, end_date: str, timeout: int = 10
+    ) -> GuardMostUsageSubscription:
         """
-        Get all admin statistics in one endpoint.
+        Get most usage subscriptions.
+
+        :param host: API host URL
+        :param token: Authentication token
+        :param start_date: Start date
+        :param end_date: End date
+        :param timeout: Request timeout in seconds
+        :return: Most usage subscription response
+        """
+        params = {"start_date": start_date, "end_date": end_date}
+        response = await cls.get(
+            url=f"{host.rstrip('/')}/api/stats/subscriptions/most_usage",
+            params=params,
+            headers=cls._generate_headers(token),
+            timeout=timeout,
+        )
+        return GuardMostUsageSubscription(**response)
+
+    @classmethod
+    async def get_usage_stats(
+        cls, host: str, token: str, start_date: str, end_date: str, timeout: int = 10
+    ) -> GuardUsageStatsResponse:
+        """
+        Get usage statistics.
+
+        :param host: API host URL
+        :param token: Authentication token
+        :param start_date: Start date
+        :param end_date: End date
+        :param timeout: Request timeout in seconds
+        :return: Usage stats response
+        """
+        params = {"start_date": start_date, "end_date": end_date}
+        response = await cls.get(
+            url=f"{host.rstrip('/')}/api/stats/usage",
+            params=params,
+            headers=cls._generate_headers(token),
+            timeout=timeout,
+        )
+        return GuardUsageStatsResponse(**response)
+
+    @classmethod
+    async def get_agent_stats(
+        cls, host: str, token: str, timeout: int = 10
+    ) -> GuardAgentStatsResponse:
+        """
+        Get agent statistics.
 
         :param host: API host URL
         :param token: Authentication token
         :param timeout: Request timeout in seconds
-        :return: Admin stats response
+        :return: Agent stats response
         """
         response = await cls.get(
-            url=f"{host.rstrip('/')}/api/stats/admin",
+            url=f"{host.rstrip('/')}/api/stats/agents",
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return AdminStatsResponseNew(**response)
+        return GuardAgentStatsResponse(**response)
 
     @classmethod
     async def get_nodes(
@@ -519,6 +569,25 @@ class GuardManager(RequestBase):
             timeout=timeout,
         )
         return GuardAdminUsageLogsResponse(**response)
+
+    @classmethod
+    async def revoke_current_admin_api_key(
+        cls, host: str, token: str, timeout: int = 10
+    ) -> GuardAdminResponse:
+        """
+        Revoke API key for the current admin.
+
+        :param host: API host URL
+        :param token: Authentication token
+        :param timeout: Request timeout in seconds
+        :return: Admin response
+        """
+        response = await cls.post(
+            url=f"{host.rstrip('/')}/api/admins/current/revoke",
+            headers=cls._generate_headers(token),
+            timeout=timeout,
+        )
+        return GuardAdminResponse(**response)
 
     @classmethod
     async def get_admin(

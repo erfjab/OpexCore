@@ -124,3 +124,64 @@ class AdminStatsResponseNew(BaseModel):
         ..., title="Yesterday Removed Subscriptions"
     )
     total_removed_subscriptions: int = Field(..., title="Total Removed Subscriptions")
+
+
+class GuardSubscriptionStatusStatsResponse(BaseModel):
+    """Subscription status statistics response"""
+
+    total: int = Field(..., title="Total")
+    active: int = Field(..., title="Active")
+    disabled: int = Field(..., title="Disabled")
+    expired: int = Field(..., title="Expired")
+    limited: int = Field(..., title="Limited")
+    pending: int = Field(..., title="Pending")
+    available: int = Field(..., title="Available")
+    unavailable: int = Field(..., title="Unavailable")
+    online: int = Field(..., title="Online")
+    offline: int = Field(..., title="Offline")
+
+
+class GuardUsageSubscriptionDetail(BaseModel):
+    """Usage subscription detail"""
+
+    username: str = Field(..., title="Username")
+    usage: int = Field(..., title="Usage")
+    is_active: bool = Field(..., title="Is Active")
+
+
+class GuardMostUsageSubscription(BaseModel):
+    """Most usage subscription response"""
+
+    subscriptions: List[GuardUsageSubscriptionDetail] = Field(..., title="Subscriptions")
+    start_date: datetime = Field(..., title="Start Date")
+    end_date: datetime = Field(..., title="End Date")
+
+
+class GuardUsageDetail(BaseModel):
+    """Usage detail"""
+
+    start_date: datetime = Field(..., title="Start Date")
+    end_date: datetime = Field(..., title="End Date")
+    usage: int = Field(..., title="Usage")
+
+
+class GuardUsageStatsResponse(BaseModel):
+    """Usage statistics response"""
+
+    total: int = Field(..., title="Total")
+    usages: List[GuardUsageDetail] = Field(..., title="Usages")
+    start_date: datetime = Field(..., title="Start Date")
+    end_date: datetime = Field(..., title="End Date")
+
+
+class GuardAgentStatsDetail(BaseModel):
+    """Agent statistics detail"""
+
+    category: str = Field(..., title="Category")
+    count: int = Field(..., title="Count")
+
+
+class GuardAgentStatsResponse(BaseModel):
+    """Agent statistics response"""
+
+    agents: List[GuardAgentStatsDetail] = Field(..., title="Agents")

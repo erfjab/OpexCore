@@ -41,6 +41,22 @@ class GuardAdminCreate(BaseModel):
     count_limit: Optional[int] = Field(None, title="Count Limit")
     usage_limit: Optional[int] = Field(None, title="Usage Limit")
     access_prefix: Optional[str] = Field(None, title="Access Prefix")
+    placeholders: Optional[List[GuardAdminPlaceHolder]] = Field(
+        None, title="Placeholders"
+    )
+    max_links: Optional[int] = Field(None, title="Max Links")
+    shuffle_links: Optional[bool] = Field(None, title="Shuffle Links")
+    access_title: Optional[str] = Field(None, title="Access Title")
+    access_description: Optional[str] = Field(None, title="Access Description")
+    telegram_id: Optional[str] = Field(None, title="Telegram Id")
+    telegram_token: Optional[str] = Field(None, title="Telegram Token")
+    expire_warning_days: Optional[int] = Field(None, title="Expire Warning Days")
+    usage_warning_percent: Optional[int] = Field(None, title="Usage Warning Percent")
+    username_tag: Optional[bool] = Field(None, title="Username Tag")
+    support_url: Optional[str] = Field(None, title="Support Url")
+    update_interval: Optional[int] = Field(None, title="Update Interval")
+    announce: Optional[str] = Field(None, title="Announce")
+    announce_url: Optional[str] = Field(None, title="Announce Url")
 
 
 class GuardAdminUpdate(BaseModel):
@@ -61,6 +77,15 @@ class GuardAdminUpdate(BaseModel):
     access_prefix: Optional[str] = Field(None, title="Access Prefix")
     access_title: Optional[str] = Field(None, title="Access Title")
     access_description: Optional[str] = Field(None, title="Access Description")
+    telegram_id: Optional[str] = Field(None, title="Telegram Id")
+    telegram_token: Optional[str] = Field(None, title="Telegram Token")
+    expire_warning_days: Optional[int] = Field(None, title="Expire Warning Days")
+    usage_warning_percent: Optional[int] = Field(None, title="Usage Warning Percent")
+    username_tag: Optional[bool] = Field(None, title="Username Tag")
+    support_url: Optional[str] = Field(None, title="Support Url")
+    update_interval: Optional[int] = Field(None, title="Update Interval")
+    announce: Optional[str] = Field(None, title="Announce")
+    announce_url: Optional[str] = Field(None, title="Announce Url")
 
 
 class GuardAdminCurrentUpdate(BaseModel):
@@ -74,6 +99,15 @@ class GuardAdminCurrentUpdate(BaseModel):
     shuffle_links: Optional[bool] = Field(None, title="Shuffle Links")
     access_title: Optional[str] = Field(None, title="Access Title")
     access_description: Optional[str] = Field(None, title="Access Description")
+    telegram_id: Optional[str] = Field(None, title="Telegram Id")
+    telegram_token: Optional[str] = Field(None, title="Telegram Token")
+    expire_warning_days: Optional[int] = Field(None, title="Expire Warning Days")
+    usage_warning_percent: Optional[int] = Field(None, title="Usage Warning Percent")
+    username_tag: Optional[bool] = Field(None, title="Username Tag")
+    support_url: Optional[str] = Field(None, title="Support Url")
+    update_interval: Optional[int] = Field(None, title="Update Interval")
+    announce: Optional[str] = Field(None, title="Announce")
+    announce_url: Optional[str] = Field(None, title="Announce Url")
 
 
 class GuardAdminResponse(BaseModel):
@@ -103,6 +137,15 @@ class GuardAdminResponse(BaseModel):
     api_key: str = Field(..., title="Api Key")
     access_title: Optional[str] = Field(None, title="Access Title")
     access_description: Optional[str] = Field(None, title="Access Description")
+    telegram_id: Optional[str] = Field(None, title="Telegram Id")
+    telegram_token: Optional[str] = Field(None, title="Telegram Token")
+    expire_warning_days: Optional[int] = Field(None, title="Expire Warning Days")
+    usage_warning_percent: Optional[int] = Field(None, title="Usage Warning Percent")
+    username_tag: Optional[bool] = Field(None, title="Username Tag")
+    support_url: Optional[str] = Field(None, title="Support Url")
+    update_interval: Optional[int] = Field(None, title="Update Interval")
+    announce: Optional[str] = Field(None, title="Announce")
+    announce_url: Optional[str] = Field(None, title="Announce Url")
     last_login_at: Optional[datetime] = Field(..., title="Last Login At")
     last_online_at: Optional[datetime] = Field(..., title="Last Online At")
     created_at: datetime = Field(..., title="Created At")

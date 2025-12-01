@@ -21,6 +21,7 @@ class GuardNodeCreate(BaseModel):
     host: str = Field(..., title="Host")
     offset_link: int = Field(0, title="Offset Link")
     batch_size: int = Field(1, title="Batch Size")
+    usage_rate: float = Field(1.0, title="Usage Rate")
 
 
 class GuardNodeUpdate(BaseModel):
@@ -32,6 +33,7 @@ class GuardNodeUpdate(BaseModel):
     host: Optional[str] = Field(None, title="Host")
     offset_link: Optional[int] = Field(None, title="Offset Link")
     batch_size: Optional[int] = Field(None, title="Batch Size")
+    usage_rate: Optional[float] = Field(None, title="Usage Rate")
 
 
 class GuardNodeResponse(BaseModel):
@@ -46,6 +48,7 @@ class GuardNodeResponse(BaseModel):
     host: str = Field(..., title="Host")
     current_usage: int = Field(..., title="Current Usage")
     last_used_at: Optional[datetime] = Field(..., title="Last Used At")
+    usage_rate: Optional[float] = Field(None, title="Usage Rate")
     offset_link: int = Field(..., title="Offset Link")
     batch_size: int = Field(..., title="Batch Size")
     created_at: datetime = Field(..., title="Created At")
