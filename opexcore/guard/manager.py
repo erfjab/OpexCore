@@ -1,7 +1,6 @@
 from typing import Optional, List, Dict, Any
 from opexcore.core import RequestBase
 from .types import (
-    AdminStatsResponseNew,
     GuardAdminCreate,
     GuardAdminCurrentUpdate,
     GuardAdminResponse,
@@ -15,7 +14,6 @@ from .types import (
     GuardServiceCreate,
     GuardServiceResponse,
     GuardServiceUpdate,
-    GuardStatsResponse,
     GuardSubscriptionCreate,
     GuardSubscriptionResponse,
     GuardSubscriptionStatsResponse,
