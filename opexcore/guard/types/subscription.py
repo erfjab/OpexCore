@@ -3,6 +3,32 @@ from datetime import datetime
 from pydantic import BaseModel, Field
 
 
+class GuardAutoRenewalCreate(BaseModel):
+    """Schema for creating a new auto renewal rule"""
+
+    limit_expire: int = Field(..., title="Limit Expire")
+    limit_usage: int = Field(..., title="Limit Usage")
+    reset_usage: bool = Field(False, title="Reset Usage")
+
+
+class GuardAutoRenewalUpdate(BaseModel):
+    """Schema for updating an existing auto renewal rule"""
+
+    id: int = Field(..., title="Id")
+    limit_expire: Optional[int] = Field(None, title="Limit Expire")
+    limit_usage: Optional[int] = Field(None, title="Limit Usage")
+    reset_usage: Optional[bool] = Field(None, title="Reset Usage")
+
+
+class GuardAutoRenewalResponse(BaseModel):
+    """Auto renewal response schema"""
+
+    id: int = Field(..., title="Id")
+    limit_expire: Optional[int] = Field(None, title="Limit Expire")
+    limit_usage: Optional[int] = Field(None, title="Limit Usage")
+    reset_usage: bool = Field(..., title="Reset Usage")
+
+
 class GuardSubscriptionCreate(BaseModel):
     """Schema for creating a new subscription"""
 
@@ -12,6 +38,12 @@ class GuardSubscriptionCreate(BaseModel):
     service_ids: List[int] = Field(..., title="Service Ids")
     access_key: Optional[str] = Field(None, title="Access Key")
     note: Optional[str] = Field(None, title="Note")
+    telegram_id: Optional[str] = Field(None, title="Telegram Id")
+    discord_webhook_url: Optional[str] = Field(None, title="Discord Webhook Url")
+    auto_delete_days: Optional[int] = Field(None, title="Auto Delete Days")
+    auto_renewals: Optional[List[GuardAutoRenewalCreate]] = Field(
+        None, title="Auto Renewals"
+    )
 
 
 class GuardSubscriptionUpdate(BaseModel):
@@ -22,6 +54,12 @@ class GuardSubscriptionUpdate(BaseModel):
     limit_expire: Optional[int] = Field(None, title="Limit Expire")
     service_ids: Optional[List[int]] = Field(None, title="Service Ids")
     note: Optional[str] = Field(None, title="Note")
+    telegram_id: Optional[str] = Field(None, title="Telegram Id")
+    discord_webhook_url: Optional[str] = Field(None, title="Discord Webhook Url")
+    auto_delete_days: Optional[int] = Field(None, title="Auto Delete Days")
+    auto_renewals: Optional[List[GuardAutoRenewalUpdate]] = Field(
+        None, title="Auto Renewals"
+    )
 
 
 class GuardSubscriptionResponse(BaseModel):
@@ -44,8 +82,11 @@ class GuardSubscriptionResponse(BaseModel):
     total_usage: int = Field(..., title="Total Usage")
     current_usage: int = Field(..., title="Current Usage")
     limit_expire: int = Field(..., title="Limit Expire")
+    auto_delete_days: int = Field(..., title="Auto Delete Days")
     service_ids: List[int] = Field(..., title="Service Ids")
     note: Optional[str] = Field(None, title="Note")
+    telegram_id: Optional[str] = Field(None, title="Telegram Id")
+    discord_webhook_url: Optional[str] = Field(None, title="Discord Webhook Url")
     online_at: Optional[datetime] = Field(..., title="Online At")
     last_reset_at: Optional[datetime] = Field(..., title="Last Reset At")
     last_revoke_at: Optional[datetime] = Field(..., title="Last Revoke At")
@@ -53,6 +94,9 @@ class GuardSubscriptionResponse(BaseModel):
     last_client_agent: Optional[str] = Field(..., title="Last Client Agent")
     created_at: datetime = Field(..., title="Created At")
     updated_at: datetime = Field(..., title="Updated At")
+    auto_renewals: List[GuardAutoRenewalResponse] = Field(
+        default_factory=list, title="Auto Renewals"
+    )
 
 
 class GuardSubscriptionUsageLog(BaseModel):

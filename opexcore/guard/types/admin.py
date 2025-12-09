@@ -50,6 +50,19 @@ class GuardAdminCreate(BaseModel):
     access_description: Optional[str] = Field(None, title="Access Description")
     telegram_id: Optional[str] = Field(None, title="Telegram Id")
     telegram_token: Optional[str] = Field(None, title="Telegram Token")
+    telegram_logger_id: Optional[str] = Field(None, title="Telegram Logger Id")
+    telegram_topic_id: Optional[str] = Field(None, title="Telegram Topic Id")
+    telegram_status: Optional[bool] = Field(False, title="Telegram Status")
+    telegram_send_subscriptions: Optional[bool] = Field(
+        False, title="Telegram Send Subscriptions"
+    )
+    discord_webhook_status: Optional[bool] = Field(
+        False, title="Discord Webhook Status"
+    )
+    discord_webhook_url: Optional[str] = Field(None, title="Discord Webhook Url")
+    discord_send_subscriptions: Optional[bool] = Field(
+        False, title="Discord Send Subscriptions"
+    )
     expire_warning_days: Optional[int] = Field(None, title="Expire Warning Days")
     usage_warning_percent: Optional[int] = Field(None, title="Usage Warning Percent")
     username_tag: Optional[bool] = Field(None, title="Username Tag")
@@ -79,6 +92,17 @@ class GuardAdminUpdate(BaseModel):
     access_description: Optional[str] = Field(None, title="Access Description")
     telegram_id: Optional[str] = Field(None, title="Telegram Id")
     telegram_token: Optional[str] = Field(None, title="Telegram Token")
+    telegram_logger_id: Optional[str] = Field(None, title="Telegram Logger Id")
+    telegram_topic_id: Optional[str] = Field(None, title="Telegram Topic Id")
+    telegram_status: Optional[bool] = Field(None, title="Telegram Status")
+    telegram_send_subscriptions: Optional[bool] = Field(
+        None, title="Telegram Send Subscriptions"
+    )
+    discord_webhook_status: Optional[bool] = Field(None, title="Discord Webhook Status")
+    discord_webhook_url: Optional[str] = Field(None, title="Discord Webhook Url")
+    discord_send_subscriptions: Optional[bool] = Field(
+        None, title="Discord Send Subscriptions"
+    )
     expire_warning_days: Optional[int] = Field(None, title="Expire Warning Days")
     usage_warning_percent: Optional[int] = Field(None, title="Usage Warning Percent")
     username_tag: Optional[bool] = Field(None, title="Username Tag")
@@ -86,6 +110,7 @@ class GuardAdminUpdate(BaseModel):
     update_interval: Optional[int] = Field(None, title="Update Interval")
     announce: Optional[str] = Field(None, title="Announce")
     announce_url: Optional[str] = Field(None, title="Announce Url")
+    totp_status: Optional[bool] = Field(None, title="Totp Status")
 
 
 class GuardAdminCurrentUpdate(BaseModel):
@@ -101,6 +126,17 @@ class GuardAdminCurrentUpdate(BaseModel):
     access_description: Optional[str] = Field(None, title="Access Description")
     telegram_id: Optional[str] = Field(None, title="Telegram Id")
     telegram_token: Optional[str] = Field(None, title="Telegram Token")
+    telegram_logger_id: Optional[str] = Field(None, title="Telegram Logger Id")
+    telegram_topic_id: Optional[str] = Field(None, title="Telegram Topic Id")
+    telegram_status: Optional[bool] = Field(None, title="Telegram Status")
+    telegram_send_subscriptions: Optional[bool] = Field(
+        None, title="Telegram Send Subscriptions"
+    )
+    discord_webhook_status: Optional[bool] = Field(None, title="Discord Webhook Status")
+    discord_webhook_url: Optional[str] = Field(None, title="Discord Webhook Url")
+    discord_send_subscriptions: Optional[bool] = Field(
+        None, title="Discord Send Subscriptions"
+    )
     expire_warning_days: Optional[int] = Field(None, title="Expire Warning Days")
     usage_warning_percent: Optional[int] = Field(None, title="Usage Warning Percent")
     username_tag: Optional[bool] = Field(None, title="Username Tag")
@@ -108,6 +144,7 @@ class GuardAdminCurrentUpdate(BaseModel):
     update_interval: Optional[int] = Field(None, title="Update Interval")
     announce: Optional[str] = Field(None, title="Announce")
     announce_url: Optional[str] = Field(None, title="Announce Url")
+    totp_status: Optional[bool] = Field(None, title="Totp Status")
 
 
 class GuardAdminResponse(BaseModel):
@@ -135,10 +172,23 @@ class GuardAdminResponse(BaseModel):
     max_links: Optional[int] = Field(..., title="Max Links")
     shuffle_links: Optional[bool] = Field(..., title="Shuffle Links")
     api_key: str = Field(..., title="Api Key")
+    totp_status: Optional[bool] = Field(None, title="Totp Status")
+    access_prefix: Optional[str] = Field(None, title="Access Prefix")
     access_title: Optional[str] = Field(None, title="Access Title")
     access_description: Optional[str] = Field(None, title="Access Description")
     telegram_id: Optional[str] = Field(None, title="Telegram Id")
     telegram_token: Optional[str] = Field(None, title="Telegram Token")
+    telegram_logger_id: Optional[str] = Field(None, title="Telegram Logger Id")
+    telegram_topic_id: Optional[str] = Field(None, title="Telegram Topic Id")
+    telegram_status: Optional[bool] = Field(None, title="Telegram Status")
+    telegram_send_subscriptions: Optional[bool] = Field(
+        None, title="Telegram Send Subscriptions"
+    )
+    discord_webhook_status: Optional[bool] = Field(None, title="Discord Webhook Status")
+    discord_webhook_url: Optional[str] = Field(None, title="Discord Webhook Url")
+    discord_send_subscriptions: Optional[bool] = Field(
+        None, title="Discord Send Subscriptions"
+    )
     expire_warning_days: Optional[int] = Field(None, title="Expire Warning Days")
     usage_warning_percent: Optional[int] = Field(None, title="Usage Warning Percent")
     username_tag: Optional[bool] = Field(None, title="Username Tag")
@@ -146,6 +196,7 @@ class GuardAdminResponse(BaseModel):
     update_interval: Optional[int] = Field(None, title="Update Interval")
     announce: Optional[str] = Field(None, title="Announce")
     announce_url: Optional[str] = Field(None, title="Announce Url")
+    last_backup_at: Optional[datetime] = Field(None, title="Last Backup At")
     last_login_at: Optional[datetime] = Field(..., title="Last Login At")
     last_online_at: Optional[datetime] = Field(..., title="Last Online At")
     created_at: datetime = Field(..., title="Created At")

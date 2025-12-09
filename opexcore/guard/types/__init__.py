@@ -32,8 +32,12 @@ from .stats import (
     GuardUsageStatsResponse,
     GuardAgentStatsDetail,
     GuardAgentStatsResponse,
+    GuardLastReachedSubscriptionDetail,
 )
 from .subscription import (
+    GuardAutoRenewalCreate,
+    GuardAutoRenewalResponse,
+    GuardAutoRenewalUpdate,
     GuardSubscriptionCreate,
     GuardSubscriptionResponse,
     GuardSubscriptionStatsResponse,
@@ -74,6 +78,10 @@ __all__ = [
     "GuardUsageStatsResponse",
     "GuardAgentStatsDetail",
     "GuardAgentStatsResponse",
+    "GuardLastReachedSubscriptionDetail",
+    "GuardAutoRenewalCreate",
+    "GuardAutoRenewalResponse",
+    "GuardAutoRenewalUpdate",
     "GuardSubscriptionCreate",
     "GuardSubscriptionResponse",
     "GuardSubscriptionStatsResponse",

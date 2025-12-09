@@ -187,3 +187,12 @@ class GuardAgentStatsResponse(BaseModel):
     """Agent statistics response"""
 
     agents: List[GuardAgentStatsDetail] = Field(..., title="Agents")
+
+
+class GuardLastReachedSubscriptionDetail(BaseModel):
+    """Detail of the last reached subscription entry"""
+
+    username: str = Field(..., title="Username")
+    reached_at: datetime = Field(..., title="Reached At")
+    limited: bool = Field(..., title="Limited")
+    expired: bool = Field(..., title="Expired")

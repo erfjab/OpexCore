@@ -1,3 +1,4 @@
+import json
 from typing import Optional, List, Dict, Any
 from opexcore.core import RequestBase
 from .types import (
@@ -23,6 +24,7 @@ from .types import (
     GuardMostUsageSubscription,
     GuardUsageStatsResponse,
     GuardAgentStatsResponse,
+    GuardLastReachedSubscriptionDetail,
 )
 
 
@@ -35,6 +37,13 @@ class GuardManager(RequestBase):
         if token:
             headers["Authorization"] = f"Bearer {token}"
         return headers
+
+    @classmethod
+    async def get_base_status(cls, host: str, timeout: int = 10) -> Dict[str, Any]:
+        """Check if the API is reachable via the base endpoint."""
+
+        response = await cls.get(url=f"{host.rstrip('/')}/", timeout=timeout)
+        return response
 
     @classmethod
     async def get_subscription_by_secret(
@@ -170,6 +179,33 @@ class GuardManager(RequestBase):
             timeout=timeout,
         )
         return GuardAgentStatsResponse(**response)
+
+    @classmethod
+    async def get_last_reached_subscriptions(
+        cls,
+        host: str,
+        token: str,
+        page: int = 1,
+        size: int = 20,
+        start_date: Optional[str] = None,
+        end_date: Optional[str] = None,
+        timeout: int = 10,
+    ) -> List[GuardLastReachedSubscriptionDetail]:
+        """Get recently reached subscriptions with pagination and optional date filters."""
+
+        params: Dict[str, Any] = {"page": page, "size": size}
+        if start_date is not None:
+            params["start_date"] = start_date
+        if end_date is not None:
+            params["end_date"] = end_date
+
+        response = await cls.get(
+            url=f"{host.rstrip('/')}/api/stats/subscriptions/reacheds",
+            params=params,
+            headers=cls._generate_headers(token),
+            timeout=timeout,
+        )
+        return [GuardLastReachedSubscriptionDetail(**item) for item in response]
 
     @classmethod
     async def get_nodes(
@@ -486,7 +522,13 @@ class GuardManager(RequestBase):
 
     @classmethod
     async def create_token(
-        cls, host: str, username: str, password: str, timeout: int = 10
+        cls,
+        host: str,
+        username: str,
+        password: str,
+        totp_code: Optional[str] = None,
+        scope: str = "",
+        timeout: int = 10,
     ) -> GuardAdminToken:
         """
         Create authentication token for admin.
@@ -494,12 +536,22 @@ class GuardManager(RequestBase):
         :param host: API host URL
         :param username: Admin username
         :param password: Admin password
+        :param totp_code: Optional six digit TOTP code
+        :param scope: OAuth scope string
         :param timeout: Request timeout in seconds
         :return: Admin token
         """
+        params = {"totp_code": totp_code} if totp_code is not None else None
+        form_data = {
+            "username": username,
+            "password": password,
+            "scope": scope,
+            "grant_type": "password",
+        }
         response = await cls.post(
             url=f"{host.rstrip('/')}/api/admins/token",
-            data={"username": username, "password": password},
+            params=params,
+            data=form_data,
             headers={"Content-Type": "application/x-www-form-urlencoded"},
             timeout=timeout,
         )
@@ -530,6 +582,7 @@ class GuardManager(RequestBase):
         host: str,
         token: str,
         admin_data: GuardAdminCurrentUpdate,
+        code: Optional[str] = None,
         timeout: int = 10,
     ) -> GuardAdminResponse:
         """
@@ -541,9 +594,13 @@ class GuardManager(RequestBase):
         :param timeout: Request timeout in seconds
         :return: Admin response
         """
+        payload: Dict[str, Any] = {"data": admin_data.model_dump(exclude_none=True)}
+        if code is not None:
+            payload["code"] = code
+
         response = await cls.put(
             url=f"{host.rstrip('/')}/api/admins/current",
-            data=admin_data.model_dump_json(exclude_none=True),
+            data=json.dumps(payload),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
@@ -567,6 +624,49 @@ class GuardManager(RequestBase):
             timeout=timeout,
         )
         return GuardAdminUsageLogsResponse(**response)
+
+    @classmethod
+    async def revoke_current_admin_totp(
+        cls, host: str, token: str, code: Optional[str] = None, timeout: int = 10
+    ) -> Dict[str, Any]:
+        """Rotate the current admin TOTP secret."""
+
+        payload: Dict[str, Any] = {"code": code} if code is not None else {}
+        response = await cls.post(
+            url=f"{host.rstrip('/')}/api/admins/current/totp/revoke",
+            data=json.dumps(payload),
+            headers=cls._generate_headers(token),
+            timeout=timeout,
+        )
+        return response
+
+    @classmethod
+    async def verify_current_admin_totp(
+        cls, host: str, token: str, code: str, timeout: int = 10
+    ) -> Dict[str, Any]:
+        """Verify and activate the pending TOTP secret for the current admin."""
+
+        payload = json.dumps({"code": code})
+        response = await cls.post(
+            url=f"{host.rstrip('/')}/api/admins/current/totp/verify",
+            data=payload,
+            headers=cls._generate_headers(token),
+            timeout=timeout,
+        )
+        return response
+
+    @classmethod
+    async def get_current_admin_backup(
+        cls, host: str, token: str, timeout: int = 10
+    ) -> Dict[str, Any]:
+        """Download the current admin backup payload."""
+
+        response = await cls.get(
+            url=f"{host.rstrip('/')}/api/admins/current/backup",
+            headers=cls._generate_headers(token),
+            timeout=timeout,
+        )
+        return response
 
     @classmethod
     async def revoke_current_admin_api_key(
@@ -888,13 +988,29 @@ class GuardManager(RequestBase):
         :param timeout: Request timeout in seconds
         :return: List of subscription responses
         """
+        payload = [sub.model_dump(exclude_none=True) for sub in subscriptions_data]
         response = await cls.post(
             url=f"{host.rstrip('/')}/api/subscriptions",
-            data=[sub.model_dump_json(exclude_none=True) for sub in subscriptions_data],
+            data=json.dumps(payload),
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
         return [GuardSubscriptionResponse(**item) for item in response]
+
+    @classmethod
+    async def delete_subscriptions(
+        cls, host: str, token: str, usernames: List[str], timeout: int = 10
+    ) -> Dict[str, Any]:
+        """Bulk delete subscriptions by usernames."""
+
+        payload = json.dumps({"usernames": usernames})
+        response = await cls.delete(
+            url=f"{host.rstrip('/')}/api/subscriptions",
+            data=payload,
+            headers=cls._generate_headers(token),
+            timeout=timeout,
+        )
+        return response
 
     @classmethod
     async def get_subscription_count(
@@ -1048,84 +1164,64 @@ class GuardManager(RequestBase):
         return GuardSubscriptionUsageLogsResponse(**response)
 
     @classmethod
-    async def enable_subscription(
-        cls, host: str, token: str, username: str, timeout: int = 10
-    ) -> GuardSubscriptionResponse:
-        """
-        Enable a subscription by username.
+    async def enable_subscriptions(
+        cls, host: str, token: str, usernames: List[str], timeout: int = 10
+    ) -> List[GuardSubscriptionResponse]:
+        """Bulk enable subscriptions by usernames."""
 
-        :param host: API host URL
-        :param token: Authentication token
-        :param username: Subscription username
-        :param timeout: Request timeout in seconds
-        :return: Subscription response
-        """
+        payload = json.dumps({"usernames": usernames})
         response = await cls.post(
-            url=f"{host.rstrip('/')}/api/subscriptions/{username}/enable",
+            url=f"{host.rstrip('/')}/api/subscriptions/enable",
+            data=payload,
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return GuardSubscriptionResponse(**response)
+        return [GuardSubscriptionResponse(**item) for item in response]
 
     @classmethod
-    async def disable_subscription(
-        cls, host: str, token: str, username: str, timeout: int = 10
-    ) -> GuardSubscriptionResponse:
-        """
-        Disable a subscription by username.
+    async def disable_subscriptions(
+        cls, host: str, token: str, usernames: List[str], timeout: int = 10
+    ) -> List[GuardSubscriptionResponse]:
+        """Bulk disable subscriptions by usernames."""
 
-        :param host: API host URL
-        :param token: Authentication token
-        :param username: Subscription username
-        :param timeout: Request timeout in seconds
-        :return: Subscription response
-        """
+        payload = json.dumps({"usernames": usernames})
         response = await cls.post(
-            url=f"{host.rstrip('/')}/api/subscriptions/{username}/disable",
+            url=f"{host.rstrip('/')}/api/subscriptions/disable",
+            data=payload,
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return GuardSubscriptionResponse(**response)
+        return [GuardSubscriptionResponse(**item) for item in response]
 
     @classmethod
-    async def revoke_subscription(
-        cls, host: str, token: str, username: str, timeout: int = 10
-    ) -> GuardSubscriptionResponse:
-        """
-        Revoke a subscription by username.
+    async def revoke_subscriptions(
+        cls, host: str, token: str, usernames: List[str], timeout: int = 10
+    ) -> List[GuardSubscriptionResponse]:
+        """Bulk revoke subscriptions by usernames."""
 
-        :param host: API host URL
-        :param token: Authentication token
-        :param username: Subscription username
-        :param timeout: Request timeout in seconds
-        :return: Subscription response
-        """
+        payload = json.dumps({"usernames": usernames})
         response = await cls.post(
-            url=f"{host.rstrip('/')}/api/subscriptions/{username}/revoke",
+            url=f"{host.rstrip('/')}/api/subscriptions/revoke",
+            data=payload,
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return GuardSubscriptionResponse(**response)
+        return [GuardSubscriptionResponse(**item) for item in response]
 
     @classmethod
-    async def reset_subscription(
-        cls, host: str, token: str, username: str, timeout: int = 10
-    ) -> GuardSubscriptionResponse:
-        """
-        Reset a subscription by username.
+    async def reset_subscriptions(
+        cls, host: str, token: str, usernames: List[str], timeout: int = 10
+    ) -> List[GuardSubscriptionResponse]:
+        """Bulk reset subscriptions by usernames."""
 
-        :param host: API host URL
-        :param token: Authentication token
-        :param username: Subscription username
-        :param timeout: Request timeout in seconds
-        :return: Subscription response
-        """
+        payload = json.dumps({"usernames": usernames})
         response = await cls.post(
-            url=f"{host.rstrip('/')}/api/subscriptions/{username}/reset",
+            url=f"{host.rstrip('/')}/api/subscriptions/reset",
+            data=payload,
             headers=cls._generate_headers(token),
             timeout=timeout,
         )
-        return GuardSubscriptionResponse(**response)
+        return [GuardSubscriptionResponse(**item) for item in response]
 
     @classmethod
     async def bulk_add_service(
